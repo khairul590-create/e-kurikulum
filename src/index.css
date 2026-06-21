@@ -1,0 +1,107 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+  body {
+    @apply bg-paper text-ink font-sans antialiased;
+    line-height: 1.6;
+    text-rendering: optimizeLegibility;
+  }
+  h1,
+  h2,
+  h3 {
+    letter-spacing: -0.5px;
+  }
+  ::selection {
+    background: #fbbf24;
+    color: #152244;
+  }
+  ::-webkit-scrollbar {
+    width: 9px;
+    height: 9px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #f0f6ff;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #3b82f6;
+    border-radius: 5px;
+  }
+}
+
+@layer components {
+  /* chunky card */
+  .card {
+    @apply rounded-[26px] border-2 border-line bg-white shadow-card;
+  }
+  .input-base {
+    @apply w-full rounded-xl border-2 border-line bg-white px-3.5 py-2.5 text-sm font-semibold text-ink
+      placeholder:font-normal placeholder:text-ink-soft outline-none transition
+      focus:border-brand focus:ring-4 focus:ring-brand/10;
+  }
+  .label-base {
+    @apply mb-1.5 block text-sm font-extrabold text-ink;
+  }
+  /* kicker pill */
+  .kicker {
+    @apply inline-block rounded-full bg-cream px-4 py-1.5 text-xs font-black uppercase tracking-widest text-brand;
+  }
+  /* sun pill button (utiliti, selain Button variant) */
+  .btn-sun {
+    @apply inline-flex items-center gap-2 rounded-2xl bg-sun px-7 py-3.5 text-sm font-black text-ink shadow-sun transition;
+  }
+  .btn-sun:hover {
+    @apply -translate-y-0.5 scale-[1.02];
+  }
+}
+
+@layer utilities {
+  /* dot pattern */
+  .dotgrid {
+    background-image: radial-gradient(rgba(255, 255, 255, 0.18) 1.5px, transparent 1.5px);
+    background-size: 26px 26px;
+  }
+  .dotgrid-ink {
+    background-image: radial-gradient(rgba(37, 99, 235, 0.12) 1.5px, transparent 1.5px);
+    background-size: 26px 26px;
+  }
+  /* playful blob */
+  .blob {
+    position: absolute;
+    border-radius: 48% 52% 60% 40% / 55% 45% 55% 45%;
+    filter: blur(2px);
+    opacity: 0.85;
+    pointer-events: none;
+  }
+  /* scroll reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px) scale(0.98);
+    transition: all 0.7s cubic-bezier(0.2, 0.7, 0.3, 1);
+  }
+  .reveal.in {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  .reveal.d1 {
+    transition-delay: 0.1s;
+  }
+  .reveal.d2 {
+    transition-delay: 0.2s;
+  }
+  .reveal.d3 {
+    transition-delay: 0.3s;
+  }
+}
