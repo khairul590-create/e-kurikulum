@@ -1,16 +1,17 @@
 import { Link } from "react-router-dom";
 import { Plus } from "lucide-react";
-import { Panel, PanelHead, PanelBody, PageTitle, InfoNote, FilterBar } from "@/components/panel/Panel";
+import { Panel, PanelHead, PanelBody, PageTitle, InfoNote } from "@/components/panel/Panel";
 import { GaugeRow, GaugeBox } from "@/components/panel/Bits";
 import { GRED_COLOR } from "@/components/charts/Bars";
 import { DonutChart } from "@/components/charts/Charts";
 import { Button } from "@/components/ui/Button";
-import { Select } from "@/components/ui/Input";
 import { useAuth } from "@/providers/AuthProvider";
+import { useYear } from "@/providers/YearProvider";
 import { useUasa } from "./useUasa";
 
 export default function UasaPage() {
   const { isAdmin } = useAuth();
+  const { label } = useYear();
   const u = useUasa();
 
   const overall = u.overall.data ?? [];
@@ -31,19 +32,13 @@ export default function UasaPage() {
       <PageTitle
         icon="📈"
         title="Analisis UASA"
-        subtitle="Ujian Akhir Sesi Akademik · Tahun 4, 5 & 6 · 5 Mata Pelajaran Teras"
+        subtitle={`Ujian Akhir Sesi Akademik · Tahun 4–6 · 5 Mata Pelajaran Teras · Sesi: ${label}`}
         action={isAdmin && <Link to="/uasa/entry"><Button><Plus className="size-4" /> Kemasukan Markah</Button></Link>}
       />
       <InfoNote>
-        ℹ️ Pelaporan UASA menggunakan <b>markah peratus &amp; gred A–F</b> (bukan TP). Markah penuh 100, markah lulus minimum 20%.
-        Gred: A≥90, B≥80, C≥65, D≥50, E≥40, F&lt;40.
+        ℹ️ Pelaporan UASA menggunakan <b>markah peratus &amp; gred A–F</b>. Markah lulus minimum 20%.
+        Gred: A≥90, B≥80, C≥65, D≥50, E≥40, F&lt;40. Tapis sesi guna pemilih di bar atas.
       </InfoNote>
-
-      <FilterBar>
-        <Select className="max-w-[180px]"><option>Semua Tahun (4–6)</option><option>Tahun 4</option><option>Tahun 5</option><option>Tahun 6</option></Select>
-        <Select className="max-w-[160px]"><option>Semua Kelas</option></Select>
-        <Select className="max-w-[180px]"><option>UASA Akhir Sesi</option><option>Pertengahan Sesi</option></Select>
-      </FilterBar>
 
       <div className="flex flex-wrap gap-3.5">
         <Panel className="min-w-[340px] flex-[1.35]">

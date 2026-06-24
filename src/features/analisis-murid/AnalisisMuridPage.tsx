@@ -1,7 +1,8 @@
 import { useState, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Search } from "lucide-react";
-import { many } from "@/lib/views";
+import { rpc } from "@/lib/views";
+import { useYear } from "@/providers/YearProvider";
 import { Panel, PanelHead, PanelBody, PageTitle } from "@/components/panel/Panel";
 import { RankNo } from "@/components/panel/Bits";
 import { Input } from "@/components/ui/Input";
@@ -9,7 +10,8 @@ import { Badge } from "@/components/ui/Badge";
 import type { UasaCemerlangMurid } from "@/types/db";
 
 export default function AnalisisMuridPage() {
-  const murid = useQuery({ queryKey: ["v_uasa_cemerlang_murid", "all"], queryFn: () => many<UasaCemerlangMurid>("v_uasa_cemerlang_murid", "purata", false) });
+  const { yearId } = useYear();
+  const murid = useQuery({ queryKey: ["fn_uasa_cemerlang", yearId, "murid"], queryFn: () => rpc<UasaCemerlangMurid>("fn_uasa_cemerlang", { p_year: yearId }) });
   const [q, setQ] = useState("");
   const rows = murid.data ?? [];
   const top = rows.slice(0, 10);

@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { many } from "@/lib/views";
+import { many, rpc } from "@/lib/views";
+import { useYear } from "@/providers/YearProvider";
 import { Panel, PanelHead, PanelBody, PageTitle } from "@/components/panel/Panel";
 import { MkBar } from "@/components/panel/Bits";
 import { TrendLine } from "@/components/charts/Charts";
@@ -9,7 +10,8 @@ import type { TahunPrestasi, TahunTrendGps } from "@/types/db";
 const BAR_FILL = ["from-[#0fa968] to-[#66bb6a]", "from-[#1a73e8] to-[#42a5f5]", "from-[#ff6d00] to-[#ffa726]"];
 
 export default function AnalisisTahunPage() {
-  const tahun = useQuery({ queryKey: ["v_tahun_prestasi"], queryFn: () => many<TahunPrestasi>("v_tahun_prestasi") });
+  const { yearId } = useYear();
+  const tahun = useQuery({ queryKey: ["fn_tahun_prestasi", yearId], queryFn: () => rpc<TahunPrestasi>("fn_tahun_prestasi", { p_year: yearId }) });
   const trend = useQuery({ queryKey: ["v_tahun_trend_gps"], queryFn: () => many<TahunTrendGps>("v_tahun_trend_gps") });
   const rows = tahun.data ?? [];
   const uasaRows = rows.filter((r) => r.tahun >= 4);

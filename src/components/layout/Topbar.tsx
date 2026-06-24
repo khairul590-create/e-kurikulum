@@ -1,18 +1,15 @@
-import { useState } from "react";
 import { Menu, ChevronDown } from "lucide-react";
 import * as Dropdown from "@radix-ui/react-dropdown-menu";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/providers/AuthProvider";
+import { useYear } from "@/providers/YearProvider";
 import { initials } from "@/lib/utils";
-import { useList } from "@/lib/crud";
 import { supabase } from "@/lib/supabase";
-import type { AcademicYear, SchoolSettings } from "@/types/db";
+import type { SchoolSettings } from "@/types/db";
 
 export function Topbar({ onMenu, title }: { onMenu: () => void; title: string }) {
   const { profile, signOut } = useAuth();
-  const years = useList<AcademicYear>("academic_years", { orderBy: "label" });
-  const current = years.data?.find((y) => y.is_current);
-  const [year, setYear] = useState<string>();
+  const { yearId, setYearId, years } = useYear();
   const sekolah = useQuery({
     queryKey: ["school_settings"],
     queryFn: async () => {
@@ -37,14 +34,16 @@ export function Topbar({ onMenu, title }: { onMenu: () => void; title: string })
       </div>
 
       <div className="ml-auto flex items-center gap-2 lg:gap-3">
-        {/* Year selector */}
+        {/* Pemilih sesi (tapis data UASA) */}
         <select
-          value={year ?? current?.label ?? ""}
-          onChange={(e) => setYear(e.target.value)}
+          value={yearId ?? ""}
+          onChange={(e) => setYearId(e.target.value || null)}
+          title="Tapis analitik UASA mengikut sesi"
           className="hidden h-9 cursor-pointer rounded-xl border border-white/25 bg-white/15 px-3 text-sm font-medium text-white outline-none [&>option]:text-ink sm:block"
         >
-          {(years.data ?? []).map((y) => (
-            <option key={y.id} value={y.label}>
+          <option value="">Semua Sesi</option>
+          {years.map((y) => (
+            <option key={y.id} value={y.id}>
               {y.label}
             </option>
           ))}

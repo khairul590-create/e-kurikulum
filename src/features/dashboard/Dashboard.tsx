@@ -34,6 +34,7 @@ const ACT_DOT = ["#0fa968", "#1a73e8", "#7c4dff", "#f9a825"];
 export default function Dashboard() {
   const d = useDashboard();
   const s = d.stats.data;
+  const du = d.dashUasa.data?.[0];
   if (d.stats.isLoading) return <PageLoader />;
 
   const rows = d.tpTaburan.data ?? [];
@@ -49,10 +50,10 @@ export default function Dashboard() {
       <StatRow>
         <MkStatCard sc={1} icon="👨‍🎓" value={formatNombor(s?.jum_murid)} label="Jumlah Murid" />
         <MkStatCard sc={2} icon="🏫" value={s?.jum_kelas ?? 0} label="Jumlah Kelas" />
-        <MkStatCard sc={3} icon="📈" value={`${s?.purata_uasa ?? 0}%`} label="Purata UASA" />
+        <MkStatCard sc={3} icon="📈" value={`${du?.purata_uasa ?? s?.purata_uasa ?? 0}%`} label="Purata UASA" />
         <MkStatCard sc={4} icon="📊" value={s?.purata_tp ?? 0} label="Purata TP (PBD)" />
         <MkStatCard sc={5} icon="📚" value={s?.jum_subjek ?? 0} label="Mata Pelajaran" />
-        <MkStatCard sc={6} icon="✅" value={`${s?.peratus_lulus_uasa ?? 0}%`} label="% Lulus UASA" />
+        <MkStatCard sc={6} icon="✅" value={`${du?.peratus_lulus_uasa ?? s?.peratus_lulus_uasa ?? 0}%`} label="% Lulus UASA" />
         <MkStatCard sc={7} icon="👨‍🏫" value={s?.jum_guru ?? 0} label="Guru Akademik" />
       </StatRow>
 
@@ -127,7 +128,7 @@ export default function Dashboard() {
             <table className="data-table">
               <thead><tr><th>#</th><th>Nama</th><th>Kelas</th><th>Purata</th></tr></thead>
               <tbody>
-                {(d.topMurid.data ?? []).map((m, i) => (
+                {(d.topMurid.data ?? []).slice(0, 5).map((m, i) => (
                   <tr key={m.student_id}>
                     <td><RankNo n={i + 1} /></td>
                     <td className="font-medium text-ink">{m.nama}</td>

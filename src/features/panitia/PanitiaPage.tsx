@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { FolderOpen } from "lucide-react";
-import { many } from "@/lib/views";
+import { many, rpc } from "@/lib/views";
+import { useYear } from "@/providers/YearProvider";
 import { Panel, PanelHead, PanelBody, PageTitle } from "@/components/panel/Panel";
 import { MkBar, ModuleGrid } from "@/components/panel/Bits";
 import { Badge } from "@/components/ui/Badge";
@@ -18,7 +19,8 @@ const BAR_FILL = [
 ];
 
 export default function PanitiaPage() {
-  const prestasi = useQuery({ queryKey: ["v_panitia_prestasi"], queryFn: () => many<PanitiaPrestasi>("v_panitia_prestasi") });
+  const { yearId } = useYear();
+  const prestasi = useQuery({ queryKey: ["fn_panitia_prestasi", yearId], queryFn: () => rpc<PanitiaPrestasi>("fn_panitia_prestasi", { p_year: yearId }) });
   const modular = useQuery({ queryKey: ["v_kssr_modular"], queryFn: () => many<KssrModular>("v_kssr_modular") });
   const rows = prestasi.data ?? [];
 

@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { many } from "@/lib/views";
+import { rpc } from "@/lib/views";
+import { useYear } from "@/providers/YearProvider";
 import { Panel, PanelHead, PanelBody, PageTitle } from "@/components/panel/Panel";
 import { MkBar } from "@/components/panel/Bits";
 import { Badge } from "@/components/ui/Badge";
@@ -8,7 +9,8 @@ import type { KelasPrestasi } from "@/types/db";
 const STATUS_TONE: Record<string, "green" | "blue" | "amber"> = { Cemerlang: "green", Baik: "blue", Sederhana: "amber" };
 
 export default function AnalisisKelasPage() {
-  const kelas = useQuery({ queryKey: ["v_kelas_prestasi"], queryFn: () => many<KelasPrestasi>("v_kelas_prestasi") });
+  const { yearId } = useYear();
+  const kelas = useQuery({ queryKey: ["fn_kelas_prestasi", yearId], queryFn: () => rpc<KelasPrestasi>("fn_kelas_prestasi", { p_year: yearId }) });
   const rows = kelas.data ?? [];
   const withUasa = rows.filter((r) => r.purata_uasa > 0);
   const best = [...withUasa].sort((a, b) => b.purata_uasa - a.purata_uasa).slice(0, 3);

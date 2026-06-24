@@ -1,5 +1,12 @@
 import { supabase } from "@/lib/supabase";
 
+/** Panggil SQL function (rpc) → pulang array baris. */
+export async function rpc<T>(fn: string, params: Record<string, unknown> = {}): Promise<T[]> {
+  const { data, error } = await supabase.rpc(fn, params);
+  if (error) throw error;
+  return (data ?? []) as T[];
+}
+
 /** Ambil satu baris dari view/table (cth view ringkasan). */
 export async function one<T>(view: string): Promise<T | null> {
   const { data, error } = await supabase.from(view).select("*").single();

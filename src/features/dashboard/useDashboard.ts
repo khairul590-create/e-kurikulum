@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { one, many } from "@/lib/views";
+import { one, many, rpc } from "@/lib/views";
+import { useYear } from "@/providers/YearProvider";
 import type {
   DashboardStats,
   PencapaianTaburan,
@@ -18,7 +19,12 @@ import type {
   PanitiaPrestasi,
 } from "@/types/db";
 
+interface DashUasa { purata_uasa: number; peratus_lulus_uasa: number }
+
 export function useDashboard() {
+  const { yearId } = useYear();
+  const p = { p_year: yearId };
+
   const stats = useQuery({ queryKey: ["v_dashboard_stats"], queryFn: () => one<DashboardStats>("v_dashboard_stats") });
   const taburan = useQuery({ queryKey: ["v_pencapaian_taburan"], queryFn: () => many<PencapaianTaburan>("v_pencapaian_taburan") });
   const rphStatus = useQuery({ queryKey: ["v_rph_status"], queryFn: () => many<RphStatusRow>("v_rph_status") });
@@ -29,16 +35,19 @@ export function useDashboard() {
   const events = useQuery({ queryKey: ["calendar_events", "dash"], queryFn: () => many<CalendarEvent>("calendar_events", "tarikh_mula", true, 12) });
   const activities = useQuery({ queryKey: ["activities", "dash"], queryFn: () => many<Activity>("activities", "created_at", false, 5) });
 
-  // V2
-  const uasaGred = useQuery({ queryKey: ["v_uasa_gred_overall"], queryFn: () => many<UasaGredOverall>("v_uasa_gred_overall") });
-  const uasaSubjek = useQuery({ queryKey: ["v_uasa_gred_subjek"], queryFn: () => many<UasaGredSubjek>("v_uasa_gred_subjek") });
+  // UASA — ditapis ikut sesi (yearId)
+  const dashUasa = useQuery({ queryKey: ["fn_dashboard_uasa", yearId], queryFn: () => rpc<DashUasa>("fn_dashboard_uasa", p) });
+  const uasaGred = useQuery({ queryKey: ["fn_uasa_gred_overall", yearId], queryFn: () => rpc<UasaGredOverall>("fn_uasa_gred_overall", p) });
+  const uasaSubjek = useQuery({ queryKey: ["fn_uasa_gred_subjek", yearId], queryFn: () => rpc<UasaGredSubjek>("fn_uasa_gred_subjek", p) });
+  const panitia = useQuery({ queryKey: ["fn_panitia_prestasi", yearId], queryFn: () => rpc<PanitiaPrestasi>("fn_panitia_prestasi", p) });
+  const topMurid = useQuery({ queryKey: ["fn_uasa_cemerlang", yearId, "top5"], queryFn: () => rpc<UasaCemerlangMurid>("fn_uasa_cemerlang", p) });
+
+  // PBD/TP — tiada year_id dlm skema → kekal kumulatif
   const tpTaburan = useQuery({ queryKey: ["v_pbd_tp_taburan"], queryFn: () => many<PbdTpTaburan>("v_pbd_tp_taburan", "tp", true) });
   const modular = useQuery({ queryKey: ["v_kssr_modular"], queryFn: () => many<KssrModular>("v_kssr_modular") });
-  const panitia = useQuery({ queryKey: ["v_panitia_prestasi"], queryFn: () => many<PanitiaPrestasi>("v_panitia_prestasi") });
-  const topMurid = useQuery({ queryKey: ["v_uasa_cemerlang_murid", "top5"], queryFn: () => many<UasaCemerlangMurid>("v_uasa_cemerlang_murid", "purata", false, 5) });
 
   return {
     stats, taburan, rphStatus, rphSubjek, trend, pentaksiran, announcements, events, activities,
-    uasaGred, uasaSubjek, tpTaburan, modular, panitia, topMurid,
+    dashUasa, uasaGred, uasaSubjek, tpTaburan, modular, panitia, topMurid,
   };
 }
