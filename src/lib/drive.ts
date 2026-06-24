@@ -29,5 +29,5 @@ export function driveFilePreview(url?: string | null): string | null {
 /** Adakah URL menunjuk terus ke fail imej? */
 export function isImageUrl(url?: string | null): boolean {
   if (!url) return false;
-  return /\.(png|jpe?g|gif|webp|svg|bmp)(\?|$)/i.test(url);
+  return /\.(png|jpe?g|gif|webp|bmp)(\?|$)/i.test(url);
 }

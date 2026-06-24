@@ -5,9 +5,10 @@ import { Button } from "@/components/ui/Button";
 import { Field, Input } from "@/components/ui/Input";
 import { useAuth } from "@/providers/AuthProvider";
 
+const ADMIN_EMAIL = "admin@kurikulum.test";
+
 export default function Login() {
   const { session, signIn, loading } = useAuth();
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [err, setErr] = useState<string>();
   const [busy, setBusy] = useState(false);
@@ -24,9 +25,9 @@ export default function Login() {
     e.preventDefault();
     setErr(undefined);
     setBusy(true);
-    const { error } = await signIn(email, password);
+    const { error } = await signIn(ADMIN_EMAIL, password);
     setBusy(false);
-    if (error) setErr("Emel atau kata laluan salah.");
+    if (error) setErr("Kata laluan salah. Cuba semula.");
   }
 
   return (
@@ -54,10 +55,10 @@ export default function Login() {
             </span>
           </h1>
           <p className="mt-4 max-w-sm font-semibold text-white/80">
-            Urus RPH, pentaksiran, pencapaian murid dan analisis kurikulum dalam satu platform yang kemas & responsif.
+            Sistem dalaman SK Darau — UASA, PBD, Panitia, Analisis Kurikulum.
           </p>
         </div>
-        <p className="relative z-10 text-xs text-white/50">© 2024/2025 E-Kurikulum. Hak cipta terpelihara.</p>
+        <p className="relative z-10 text-xs text-white/50">© 2025/2026 E-Kurikulum SK Darau.</p>
       </div>
 
       {/* Right form */}
@@ -70,19 +71,24 @@ export default function Login() {
             <p className="font-black text-ink">E-Kurikulum</p>
           </div>
 
-          <h2 className="text-2xl font-black tracking-tight text-ink">Log Masuk 👋</h2>
-          <p className="mt-1 text-sm font-semibold text-ink-muted">Masukkan kredensial untuk mengakses sistem.</p>
+          <h2 className="text-2xl font-black tracking-tight text-ink">Masukkan Kata Laluan 🔐</h2>
+          <p className="mt-1 text-sm font-semibold text-ink-muted">Kata laluan pentadbir diperlukan untuk akses penuh.</p>
 
           <form onSubmit={submit} className="mt-6 space-y-4">
-            <Field label="Emel">
-              <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="email" />
-            </Field>
             <Field label="Kata Laluan">
-              <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required autoComplete="current-password" />
+              <Input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                autoComplete="current-password"
+                autoFocus
+                placeholder="••••••••"
+              />
             </Field>
             {err && <p className="text-sm text-danger">{err}</p>}
             <Button type="submit" variant="sun" className="w-full" loading={busy}>
-              Log Masuk →
+              Masuk →
             </Button>
           </form>
 

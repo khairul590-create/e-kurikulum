@@ -18,9 +18,11 @@ function useTitle() {
   return "Dashboard Kurikulum";
 }
 
+// Emel admin disimpan di bahagian ini — tidak dipaparkan kepada pengguna
+const ADMIN_EMAIL = "admin@kurikulum.test";
+
 function GuestLoginPanel() {
   const { signIn } = useAuth();
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [err, setErr] = useState<string>();
   const [busy, setBusy] = useState(false);
@@ -29,9 +31,9 @@ function GuestLoginPanel() {
     e.preventDefault();
     setErr(undefined);
     setBusy(true);
-    const { error } = await signIn(email, password);
+    const { error } = await signIn(ADMIN_EMAIL, password);
     setBusy(false);
-    if (error) setErr("Emel atau kata laluan salah.");
+    if (error) setErr("Kata laluan salah. Cuba semula.");
   }
 
   return (
@@ -41,24 +43,12 @@ function GuestLoginPanel() {
           <div className="mb-3 inline-grid size-16 place-items-center rounded-2xl bg-gradient-to-br from-[#1a237e] to-[#3949ab] text-3xl shadow-lg">
             🔐
           </div>
-          <h2 className="text-xl font-extrabold tracking-tight text-ink">Log Masuk Pentadbir</h2>
+          <h2 className="text-xl font-extrabold tracking-tight text-ink">Masukkan Kata Laluan</h2>
           <p className="mt-1 text-[13px] text-ink-muted">
-            Masukkan kata laluan untuk papar data dan mengedit rekod.
+            Kata laluan diperlukan untuk papar data dan mengedit rekod.
           </p>
         </div>
         <form onSubmit={submit} className="space-y-4">
-          <div className="space-y-1.5">
-            <label className="text-[13px] font-semibold text-ink">Emel</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              autoComplete="email"
-              placeholder="admin@sekolah.my"
-              className="w-full rounded-xl border border-line bg-paper px-3.5 py-2.5 text-sm text-ink outline-none focus:border-brand focus:ring-2 focus:ring-brand/20"
-            />
-          </div>
           <div className="space-y-1.5">
             <label className="text-[13px] font-semibold text-ink">Kata Laluan</label>
             <input
@@ -68,6 +58,7 @@ function GuestLoginPanel() {
               required
               autoComplete="current-password"
               placeholder="••••••••"
+              autoFocus
               className="w-full rounded-xl border border-line bg-paper px-3.5 py-2.5 text-sm text-ink outline-none focus:border-brand focus:ring-2 focus:ring-brand/20"
             />
           </div>
@@ -78,11 +69,11 @@ function GuestLoginPanel() {
             className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#1a237e] to-[#3949ab] py-2.5 text-sm font-bold text-white transition hover:opacity-90 disabled:opacity-60"
           >
             {busy ? <Loader2 className="size-4 animate-spin" /> : null}
-            {busy ? "Mengesahkan..." : "Log Masuk Admin →"}
+            {busy ? "Mengesahkan..." : "Masuk →"}
           </button>
         </form>
         <p className="mt-5 text-center text-[12px] text-ink-soft">
-          Sistem E-Kurikulum · Data dilindungi
+          E-Kurikulum SK Darau · Sistem Dalaman Sekolah
         </p>
       </div>
     </div>
