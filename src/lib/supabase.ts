@@ -3,8 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 const url = import.meta.env.VITE_SUPABASE_URL as string;
 const anon = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
 
-if (!url || !anon) {
-  // Bantu developer kesan .env hilang lebih awal
+if (import.meta.env.DEV && (!url || !anon)) {
   console.error(
     "VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY tiada. Salin .env.local.example -> .env.local",
   );

@@ -7,6 +7,7 @@ import {
 } from "react";
 import type { Session } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabase";
+import { queryClient } from "@/lib/queryClient";
 import type { Profile } from "@/types/db";
 
 interface AuthState {
@@ -64,6 +65,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     },
     async signOut() {
       await supabase.auth.signOut();
+      // Buang semua cache data murid dari memori selepas log keluar
+      queryClient.clear();
     },
     async refreshProfile() {
       if (session) await loadProfile(session.user.id);
