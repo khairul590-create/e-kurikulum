@@ -8,7 +8,7 @@ import { supabase } from "@/lib/supabase";
 import type { SchoolSettings } from "@/types/db";
 
 export function Topbar({ onMenu, title }: { onMenu: () => void; title: string }) {
-  const { profile, signOut } = useAuth();
+  const { profile, session, signOut } = useAuth();
   const { yearId, setYearId, years } = useYear();
   const sekolah = useQuery({
     queryKey: ["school_settings"],
@@ -34,65 +34,77 @@ export function Topbar({ onMenu, title }: { onMenu: () => void; title: string })
       </div>
 
       <div className="ml-auto flex items-center gap-2 lg:gap-3">
-        {/* Pemilih sesi (tapis data UASA) */}
-        <select
-          value={yearId ?? ""}
-          onChange={(e) => setYearId(e.target.value || null)}
-          title="Tapis analitik UASA mengikut sesi"
-          className="hidden h-9 cursor-pointer rounded-xl border border-white/25 bg-white/15 px-3 text-sm font-medium text-white outline-none [&>option]:text-ink sm:block"
-        >
-          <option value="">Semua Sesi</option>
-          {years.map((y) => (
-            <option key={y.id} value={y.id}>
-              {y.label}
-            </option>
-          ))}
-        </select>
+        {/* Pemilih sesi — hanya papar bila log masuk */}
+        {session && (
+          <select
+            value={yearId ?? ""}
+            onChange={(e) => setYearId(e.target.value || null)}
+            title="Tapis analitik UASA mengikut sesi"
+            className="hidden h-9 cursor-pointer rounded-xl border border-white/25 bg-white/15 px-3 text-sm font-medium text-white outline-none [&>option]:text-ink sm:block"
+          >
+            <option value="">Semua Sesi</option>
+            {years.map((y) => (
+              <option key={y.id} value={y.id}>
+                {y.label}
+              </option>
+            ))}
+          </select>
+        )}
 
-        {/* Profile chip */}
-        <Dropdown.Root>
-          <Dropdown.Trigger className="flex items-center gap-2.5 rounded-xl bg-white/15 px-3 py-1.5 outline-none transition hover:bg-white/25">
-            <div className="grid size-9 place-items-center rounded-full bg-white/25 text-sm font-semibold text-white">
-              {initials(profile?.nama)}
-            </div>
-            <div className="hidden text-left leading-tight sm:block">
-              <p className="text-[13px] font-semibold text-white">{profile?.nama ?? "Pengguna"}</p>
-              <p className="text-[11px] text-white/85">{profile?.jawatan ?? "Guru"}</p>
-              <div className="mt-0.5 flex items-center gap-1">
-                <span className="size-1.5 rounded-full bg-[#69f0ae]" />
-                <span className="text-[10px] text-[#69f0ae]">Online</span>
+        {session ? (
+          /* Profile chip — log masuk */
+          <Dropdown.Root>
+            <Dropdown.Trigger className="flex items-center gap-2.5 rounded-xl bg-white/15 px-3 py-1.5 outline-none transition hover:bg-white/25">
+              <div className="grid size-9 place-items-center rounded-full bg-white/25 text-sm font-semibold text-white">
+                {initials(profile?.nama)}
               </div>
-            </div>
-            <ChevronDown className="hidden size-4 text-white/70 sm:block" />
-          </Dropdown.Trigger>
-          <Dropdown.Portal>
-            <Dropdown.Content
-              align="end"
-              sideOffset={8}
-              className="z-50 w-52 rounded-xl border border-line bg-white p-1.5 shadow-pop animate-fade-in"
-            >
-              <div className="px-3 py-2">
-                <p className="text-sm font-semibold text-ink">{profile?.nama}</p>
-                <p className="text-xs text-ink-muted">{profile?.email}</p>
+              <div className="hidden text-left leading-tight sm:block">
+                <p className="text-[13px] font-semibold text-white">{profile?.nama ?? "Pengguna"}</p>
+                <p className="text-[11px] text-white/85">{profile?.jawatan ?? "Guru"}</p>
+                <div className="mt-0.5 flex items-center gap-1">
+                  <span className="size-1.5 rounded-full bg-[#69f0ae]" />
+                  <span className="text-[10px] text-[#69f0ae]">Online</span>
+                </div>
               </div>
-              <Dropdown.Separator className="my-1 h-px bg-line" />
-              <Dropdown.Item asChild>
-                <a
-                  href="/tetapan"
-                  className="block cursor-pointer rounded-lg px-3 py-2 text-sm text-ink outline-none hover:bg-slate-100"
-                >
-                  Profil & Tetapan
-                </a>
-              </Dropdown.Item>
-              <Dropdown.Item
-                onClick={() => signOut()}
-                className="cursor-pointer rounded-lg px-3 py-2 text-sm text-danger outline-none hover:bg-red-50"
+              <ChevronDown className="hidden size-4 text-white/70 sm:block" />
+            </Dropdown.Trigger>
+            <Dropdown.Portal>
+              <Dropdown.Content
+                align="end"
+                sideOffset={8}
+                className="z-50 w-52 rounded-xl border border-line bg-white p-1.5 shadow-pop animate-fade-in"
               >
-                Log Keluar
-              </Dropdown.Item>
-            </Dropdown.Content>
-          </Dropdown.Portal>
-        </Dropdown.Root>
+                <div className="px-3 py-2">
+                  <p className="text-sm font-semibold text-ink">{profile?.nama}</p>
+                  <p className="text-xs text-ink-muted">{profile?.email}</p>
+                </div>
+                <Dropdown.Separator className="my-1 h-px bg-line" />
+                <Dropdown.Item asChild>
+                  <a
+                    href="/tetapan"
+                    className="block cursor-pointer rounded-lg px-3 py-2 text-sm text-ink outline-none hover:bg-slate-100"
+                  >
+                    Profil & Tetapan
+                  </a>
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => signOut()}
+                  className="cursor-pointer rounded-lg px-3 py-2 text-sm text-danger outline-none hover:bg-red-50"
+                >
+                  Log Keluar
+                </Dropdown.Item>
+              </Dropdown.Content>
+            </Dropdown.Portal>
+          </Dropdown.Root>
+        ) : (
+          /* Butang log masuk — mod umum */
+          <a
+            href="/login"
+            className="flex items-center gap-2 rounded-xl bg-white/15 px-3 py-2 text-[13px] font-semibold text-white transition hover:bg-white/25"
+          >
+            🔐 <span className="hidden sm:inline">Log Masuk Admin</span>
+          </a>
+        )}
       </div>
     </header>
   );

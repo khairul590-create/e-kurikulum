@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import { AppShell } from "@/components/layout/AppShell";
-import { ProtectedRoute, RoleGate } from "./guards";
+import { RoleGate } from "./guards";
 import { PageLoader } from "@/components/ui/Misc";
 
 const Login = lazy(() => import("@/pages/Login"));
@@ -47,11 +47,7 @@ export const router = createBrowserRouter([
   { path: "/login", element: wrap(<Login />) },
   {
     path: "/",
-    element: (
-      <ProtectedRoute>
-        <AppShell />
-      </ProtectedRoute>
-    ),
+    element: <AppShell />,
     children: [
       { index: true, element: wrap(<Dashboard />) },
       // V2 analisis

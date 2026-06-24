@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, Link } from "react-router-dom";
 import { GraduationCap, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Field, Input } from "@/components/ui/Input";
@@ -7,8 +7,8 @@ import { useAuth } from "@/providers/AuthProvider";
 
 export default function Login() {
   const { session, signIn, loading } = useAuth();
-  const [email, setEmail] = useState("admin@kurikulum.test");
-  const [password, setPassword] = useState("password123");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [err, setErr] = useState<string>();
   const [busy, setBusy] = useState(false);
 
@@ -86,11 +86,10 @@ export default function Login() {
             </Button>
           </form>
 
-          <div className="mt-6 rounded-xl border-2 border-line bg-cream p-4 text-xs font-semibold text-ink-muted">
-            <p className="font-black text-ink">Akaun Pentadbir</p>
-            <p className="mt-1">Emel: admin@kurikulum.test</p>
-            <p>Kata laluan: password123</p>
-            <p className="mt-1 text-ink-soft">Tukar di Tetapan selepas log masuk.</p>
+          <div className="mt-6 text-center">
+            <Link to="/" className="text-[13px] font-semibold text-brand hover:underline">
+              ← Balik ke Dashboard
+            </Link>
           </div>
         </div>
       </div>

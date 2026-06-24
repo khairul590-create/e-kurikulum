@@ -11,8 +11,9 @@ export function ProtectedRoute({ children }: { children: ReactNode }) {
 }
 
 export function RoleGate({ children }: { children: ReactNode }) {
-  const { isAdmin, loading } = useAuth();
+  const { isAdmin, session, loading } = useAuth();
   if (loading) return <PageLoader />;
+  if (!session) return <Navigate to="/login" replace />;
   if (!isAdmin) return <Navigate to="/" replace />;
   return <>{children}</>;
 }
