@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
-import { Loader2 } from "lucide-react";
+import { Loader2, GraduationCap } from "lucide-react";
 import { Sidebar } from "./Sidebar";
 import { Topbar } from "./Topbar";
 import { ActionBar } from "./ActionBar";
@@ -18,7 +18,6 @@ function useTitle() {
   return "Dashboard Kurikulum";
 }
 
-// Emel admin disimpan di bahagian ini — tidak dipaparkan kepada pengguna
 const ADMIN_EMAIL = "admin@kurikulum.test";
 
 function GuestLoginPanel() {
@@ -37,43 +36,53 @@ function GuestLoginPanel() {
   }
 
   return (
-    <div className="flex flex-1 items-center justify-center p-6">
-      <div className="w-full max-w-sm rounded-2xl border border-line bg-white p-8 shadow-pop">
-        <div className="mb-6 text-center">
-          <div className="mb-3 inline-grid size-16 place-items-center rounded-2xl bg-gradient-to-br from-[#1a237e] to-[#3949ab] text-3xl shadow-lg">
-            🔐
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-gradient-to-br from-[#1a237e] via-[#283593] to-[#3949ab] p-4">
+      {/* blur blobs */}
+      <div className="pointer-events-none absolute -left-24 -top-24 size-80 rounded-full bg-[#5c6bc0]/40 blur-3xl" />
+      <div className="pointer-events-none absolute -bottom-20 -right-16 size-72 rounded-full bg-[#7986cb]/30 blur-3xl" />
+
+      <div className="relative z-10 w-full max-w-[380px] rounded-3xl bg-white px-8 py-10 shadow-2xl">
+        {/* Icon */}
+        <div className="mb-5 flex flex-col items-center gap-3">
+          <div className="grid size-[72px] place-items-center rounded-[22px] bg-gradient-to-br from-[#3949ab] via-[#5c6bc0] to-[#7986cb] shadow-lg">
+            <GraduationCap className="size-9 text-white" />
           </div>
-          <h2 className="text-xl font-extrabold tracking-tight text-ink">Masukkan Kata Laluan</h2>
-          <p className="mt-1 text-[13px] text-ink-muted">
-            Kata laluan diperlukan untuk papar data dan mengedit rekod.
-          </p>
+          <div className="text-center">
+            <h1 className="text-[20px] font-extrabold tracking-tight text-[#1a237e]">
+              E-Kurikulum
+            </h1>
+            <p className="mt-0.5 text-[13px] text-[#666]">
+              SK Darau · Log masuk untuk teruskan
+            </p>
+          </div>
         </div>
-        <form onSubmit={submit} className="space-y-4">
-          <div className="space-y-1.5">
-            <label className="text-[13px] font-semibold text-ink">Kata Laluan</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              autoComplete="current-password"
-              placeholder="••••••••"
-              autoFocus
-              className="w-full rounded-xl border border-line bg-paper px-3.5 py-2.5 text-sm text-ink outline-none focus:border-brand focus:ring-2 focus:ring-brand/20"
-            />
-          </div>
-          {err && <p className="text-sm font-semibold text-danger">{err}</p>}
+
+        <form onSubmit={submit} className="space-y-3">
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            autoComplete="current-password"
+            placeholder="Kata laluan admin"
+            autoFocus
+            className="w-full rounded-2xl border border-[#e0e0e0] bg-[#f8f9ff] px-4 py-3.5 text-[15px] text-[#333] outline-none transition focus:border-[#5c6bc0] focus:ring-2 focus:ring-[#5c6bc0]/20"
+          />
+          {err && (
+            <p className="text-[13px] font-semibold text-red-500">{err}</p>
+          )}
           <button
             type="submit"
             disabled={busy}
-            className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#1a237e] to-[#3949ab] py-2.5 text-sm font-bold text-white transition hover:opacity-90 disabled:opacity-60"
+            className="flex w-full items-center justify-center gap-2 rounded-2xl bg-[#f9a825] py-3.5 text-[15px] font-bold text-[#1a237e] transition hover:bg-[#f57f17] disabled:opacity-60"
           >
-            {busy ? <Loader2 className="size-4 animate-spin" /> : null}
-            {busy ? "Mengesahkan..." : "Masuk →"}
+            {busy ? <Loader2 className="size-5 animate-spin" /> : "🔑"}
+            {busy ? "Mengesahkan..." : "Log Masuk"}
           </button>
         </form>
-        <p className="mt-5 text-center text-[12px] text-ink-soft">
-          E-Kurikulum SK Darau · Sistem Dalaman Sekolah
+
+        <p className="mt-5 text-center text-[12px] text-[#999]">
+          Akses terhad — data murid dilindungi
         </p>
       </div>
     </div>
@@ -84,6 +93,9 @@ export function AppShell() {
   const [open, setOpen] = useState(false);
   const { session, loading } = useAuth();
   const title = useTitle();
+
+  // Full-screen guest panel — tanpa sidebar/topbar
+  if (!loading && !session) return <GuestLoginPanel />;
 
   return (
     <div className="relative flex h-screen overflow-hidden bg-paper">
@@ -120,10 +132,10 @@ export function AppShell() {
       <div className="relative z-10 flex min-w-0 flex-1 flex-col">
         <Topbar onMenu={() => setOpen(true)} title={title} />
         <main className="flex flex-1 flex-col overflow-y-auto">
-          <div className="flex flex-1 flex-col p-4 lg:px-5 lg:py-4">
-            {loading ? null : session ? <Outlet /> : <GuestLoginPanel />}
+          <div className="flex-1 p-4 lg:px-5 lg:py-4">
+            {loading ? null : <Outlet />}
           </div>
-          {session && <ActionBar />}
+          <ActionBar />
           <Footer />
         </main>
       </div>
