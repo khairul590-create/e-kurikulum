@@ -34,7 +34,7 @@ export function PanelHead({
   return (
     <div
       className={cn(
-        "flex items-center gap-2 bg-gradient-to-r px-4 py-3 text-[13px] font-bold uppercase tracking-wide text-white",
+        "flex items-center gap-2 bg-gradient-to-r px-4 py-3 text-[15px] font-bold uppercase tracking-wide text-white",
         HEAD_GRAD[variant],
         className,
       )}
@@ -49,7 +49,7 @@ export function PanelHead({
 }
 
 export function PanelBody({ className, ...rest }: HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn("p-4", className)} {...rest} />;
+  return <div className={cn("overflow-x-auto p-4", className)} {...rest} />;
 }
 
 /** Tajuk page ikut mockup (navy bold + subtitle). */
@@ -67,11 +67,11 @@ export function PageTitle({
   return (
     <div className="mb-3 flex flex-wrap items-end justify-between gap-3">
       <div>
-        <h1 className="flex items-center gap-2 font-display text-lg font-extrabold text-[#1a237e]">
+        <h1 className="flex items-center gap-2 font-display text-xl font-extrabold text-[#1a237e] lg:text-2xl">
           {icon && <span>{icon}</span>}
           {title}
         </h1>
-        {subtitle && <p className="mt-0.5 text-[12px] text-[#777]">{subtitle}</p>}
+        {subtitle && <p className="mt-0.5 text-[13px] text-[#777]">{subtitle}</p>}
       </div>
       {action}
     </div>
@@ -81,7 +81,7 @@ export function PageTitle({
 /** Nota maklumat biru ikut mockup. */
 export function InfoNote({ children }: { children: ReactNode }) {
   return (
-    <div className="mb-3.5 rounded-lg border-l-4 border-[#1a73e8] bg-[#e3f2fd] px-3.5 py-2.5 text-[11px] leading-relaxed text-[#1565c0]">
+    <div className="mb-3.5 rounded-lg border-l-4 border-[#1a73e8] bg-[#e3f2fd] px-3.5 py-3 text-[13px] leading-relaxed text-[#1565c0]">
       {children}
     </div>
   );

@@ -19,13 +19,13 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
   const sub = sekolah.data?.subtajuk ?? sekolah.data?.alamat ?? "Kota Kinabalu, Sabah";
 
   return (
-    <aside className="flex h-full w-[225px] flex-col overflow-y-auto bg-gradient-to-b from-[#1a237e] via-[#283593] to-[#3949ab] pb-4">
+    <aside className="flex h-full w-[240px] flex-col overflow-y-auto bg-gradient-to-b from-[#1a237e] via-[#283593] to-[#3949ab] pb-4">
       {/* Logo */}
       <div className="flex items-center gap-2.5 border-b border-white/15 px-4 py-4">
-        <div className="grid size-[42px] shrink-0 place-items-center rounded-full bg-white text-xl">🎓</div>
+        <div className="grid size-[44px] shrink-0 place-items-center rounded-full bg-white text-2xl">🎓</div>
         <div className="leading-tight text-white">
-          <div className="text-[11px] font-bold uppercase">{nama}</div>
-          <div className="text-[9px] opacity-75">{sub}</div>
+          <div className="text-[13px] font-bold uppercase">{nama}</div>
+          <div className="text-[10px] opacity-75">{sub}</div>
         </div>
       </div>
 
@@ -36,7 +36,7 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
           if (items.length === 0) return null;
           return (
             <div key={gi}>
-              <div className="px-3 pb-0.5 pt-2.5 text-[9px] font-bold uppercase tracking-[1.2px] text-white/50">
+              <div className="px-3 pb-1 pt-3 text-[10px] font-bold uppercase tracking-[1.2px] text-white/50">
                 {g.title ?? "Dashboard"}
               </div>
               {items.map((i) => {
@@ -49,14 +49,14 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
                     onClick={onNavigate}
                     className={({ isActive }) =>
                       cn(
-                        "flex items-center gap-2.5 border-l-[3px] px-4 py-2 text-[12px] font-medium transition",
+                        "flex items-center gap-2.5 border-l-[3px] px-4 py-2.5 text-[14px] font-medium transition",
                         isActive
                           ? "border-gold bg-white/[0.16] text-white"
                           : "border-transparent text-white/85 hover:bg-white/10 hover:text-white",
                       )
                     }
                   >
-                    <Icon className="size-[15px] shrink-0" />
+                    <Icon className="size-[17px] shrink-0" />
                     <span className="truncate">{i.label}</span>
                   </NavLink>
                 );

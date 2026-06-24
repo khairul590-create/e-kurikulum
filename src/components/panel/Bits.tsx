@@ -5,10 +5,10 @@ import { cn } from "@/lib/utils";
 export function MkBar({ label, value, fill }: { label: ReactNode; value: number; fill: string }) {
   return (
     <div className="flex items-center gap-2.5">
-      <div className="w-[110px] shrink-0 truncate text-[11px] font-semibold">{label}</div>
-      <div className="relative h-[22px] flex-1 overflow-hidden rounded-[20px] bg-[#eef2ff]">
+      <div className="w-[120px] shrink-0 truncate text-[13px] font-semibold">{label}</div>
+      <div className="relative h-[26px] flex-1 overflow-hidden rounded-[20px] bg-[#eef2ff]">
         <div
-          className={cn("flex h-full items-center justify-end rounded-[20px] bg-gradient-to-r px-2 text-[10px] font-bold text-white transition-all", fill)}
+          className={cn("flex h-full items-center justify-end rounded-[20px] bg-gradient-to-r px-2.5 text-[12px] font-bold text-white transition-all", fill)}
           style={{ width: `${Math.max(0, Math.min(100, Number(value) || 0))}%` }}
         >
           {value}%
@@ -31,9 +31,9 @@ export function GredRow({ data }: { data: { gred: string; bil: number }[] }) {
   return (
     <div className="flex gap-1.5">
       {data.map((d) => (
-        <div key={d.gred} className={cn("flex-1 rounded-lg bg-gradient-to-br p-2 text-center text-white", GR[d.gred] ?? GR.F)}>
-          <div className="text-base font-extrabold leading-none">{d.gred}</div>
-          <div className="mt-0.5 text-[10px] opacity-90">{d.bil}</div>
+        <div key={d.gred} className={cn("flex-1 rounded-lg bg-gradient-to-br p-2.5 text-center text-white", GR[d.gred] ?? GR.F)}>
+          <div className="text-xl font-extrabold leading-none">{d.gred}</div>
+          <div className="mt-1 text-[12px] opacity-90">{d.bil}</div>
         </div>
       ))}
     </div>
@@ -50,9 +50,9 @@ const G: Record<GaugeTone, string> = {
 };
 export function GaugeBox({ value, label, tone }: { value: ReactNode; label: ReactNode; tone: GaugeTone }) {
   return (
-    <div className={cn("flex-1 rounded-[10px] p-2.5 text-center", G[tone])}>
-      <div className="text-xl font-extrabold leading-none">{value}</div>
-      <div className="mt-1 text-[9px] font-medium leading-tight">{label}</div>
+    <div className={cn("flex-1 rounded-[10px] p-3 text-center", G[tone])}>
+      <div className="text-2xl font-extrabold leading-none">{value}</div>
+      <div className="mt-1.5 text-[11px] font-medium leading-tight">{label}</div>
     </div>
   );
 }
@@ -74,12 +74,12 @@ export function ColChart({
       {data.map((d, i) => (
         <div key={i} className="flex h-full flex-1 flex-col items-center justify-end gap-1.5">
           <div
-            className={cn("flex w-[62%] items-start justify-center rounded-t-md bg-gradient-to-b pt-0.5 text-[11px] font-bold text-white", d.grad)}
+            className={cn("flex w-[62%] items-start justify-center rounded-t-md bg-gradient-to-b pt-1 text-[13px] font-bold text-white", d.grad)}
             style={{ height: `${Math.max(14, (d.value / max) * 100)}%` }}
           >
             {d.value}
           </div>
-          <div className="text-center text-[10px] font-semibold leading-tight text-[#555]">{d.label}</div>
+          <div className="text-center text-[12px] font-semibold leading-tight text-[#555]">{d.label}</div>
         </div>
       ))}
     </div>
@@ -90,7 +90,7 @@ export function ColChart({
 export function RankNo({ n }: { n: number }) {
   const bg = n === 1 ? "bg-[#f9a825]" : n === 2 ? "bg-[#9e9e9e]" : n === 3 ? "bg-[#8d6e63]" : "bg-[#90a4ae]";
   return (
-    <span className={cn("inline-grid size-[22px] place-items-center rounded-full text-[11px] font-bold text-white", bg)}>{n}</span>
+    <span className={cn("inline-grid size-[26px] place-items-center rounded-full text-[13px] font-bold text-white", bg)}>{n}</span>
   );
 }
 
@@ -114,8 +114,8 @@ export function ModuleGrid({ data }: { data: { modul: string; senarai: string | 
     <div className="flex flex-col gap-2.5">
       {sorted.map((m) => (
         <div key={m.modul} className={cn("rounded-[10px] border-l-4 bg-[#f8f9ff] px-3 py-2.5", MODUL_BORDER[m.modul] ?? MODUL_BORDER.tiada)}>
-          <div className="text-[11px] font-bold text-ink">{MODUL_TITLE[m.modul] ?? m.modul}</div>
-          <div className="mt-1 text-[10px] leading-relaxed text-[#666]">{m.senarai ?? "—"}</div>
+          <div className="text-[13px] font-bold text-ink">{MODUL_TITLE[m.modul] ?? m.modul}</div>
+          <div className="mt-1 text-[12px] leading-relaxed text-[#666]">{m.senarai ?? "—"}</div>
         </div>
       ))}
     </div>

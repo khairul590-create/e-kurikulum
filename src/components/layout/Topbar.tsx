@@ -29,8 +29,8 @@ export function Topbar({ onMenu, title }: { onMenu: () => void; title: string })
       </button>
 
       <div className="min-w-0">
-        <h1 className="truncate text-base font-extrabold tracking-tight lg:text-lg">{title}</h1>
-        <p className="hidden truncate font-display text-[11px] font-semibold italic text-gold sm:block">{nama}</p>
+        <h1 className="truncate text-lg font-extrabold tracking-tight lg:text-xl">{title}</h1>
+        <p className="hidden truncate font-display text-[12px] font-semibold italic text-gold sm:block">{nama}</p>
       </div>
 
       <div className="ml-auto flex items-center gap-2 lg:gap-3">
@@ -56,11 +56,11 @@ export function Topbar({ onMenu, title }: { onMenu: () => void; title: string })
               {initials(profile?.nama)}
             </div>
             <div className="hidden text-left leading-tight sm:block">
-              <p className="text-[12px] font-semibold text-white">{profile?.nama ?? "Pengguna"}</p>
-              <p className="text-[10px] text-white/85">{profile?.jawatan ?? "Guru"}</p>
+              <p className="text-[13px] font-semibold text-white">{profile?.nama ?? "Pengguna"}</p>
+              <p className="text-[11px] text-white/85">{profile?.jawatan ?? "Guru"}</p>
               <div className="mt-0.5 flex items-center gap-1">
                 <span className="size-1.5 rounded-full bg-[#69f0ae]" />
-                <span className="text-[9px] text-[#69f0ae]">Online</span>
+                <span className="text-[10px] text-[#69f0ae]">Online</span>
               </div>
             </div>
             <ChevronDown className="hidden size-4 text-white/70 sm:block" />

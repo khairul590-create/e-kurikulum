@@ -36,7 +36,7 @@ function Btn({
   return (
     <button
       onClick={onClick}
-      className={`flex items-center gap-1.5 rounded-lg px-4 py-2 text-[11px] font-semibold text-white transition hover:-translate-y-0.5 hover:opacity-90 ${className}`}
+      className={`flex items-center gap-1.5 rounded-lg px-4 py-2.5 text-[13px] font-semibold text-white transition hover:-translate-y-0.5 hover:opacity-90 ${className}`}
     >
       {icon}
       {children}

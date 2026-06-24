@@ -62,13 +62,13 @@ export default function Dashboard() {
         <Panel className="min-w-[340px] flex-[1.35]">
           <PanelHead variant="blue" icon="📊" tag="Tahun 4–6">Analisis UASA Mengikut Subjek</PanelHead>
           <PanelBody className="space-y-3">
-            <p className="text-[11px] font-semibold text-[#555]">📋 Agihan Gred Keseluruhan (Markah /100 · Lulus 20%)</p>
+            <p className="text-[13px] font-semibold text-[#555]">📋 Agihan Gred Keseluruhan (Markah /100 · Lulus 20%)</p>
             {(d.uasaGred.data ?? []).length > 0 ? (
               <GredRow data={(d.uasaGred.data ?? []).map((g) => ({ gred: g.gred, bil: g.bilangan }))} />
             ) : (
               <p className="text-[11px] text-ink-soft">Tiada data UASA.</p>
             )}
-            <p className="pt-1 text-[11px] font-semibold text-[#555]">📈 Purata Peratus Mengikut Mata Pelajaran</p>
+            <p className="pt-1 text-[13px] font-semibold text-[#555]">📈 Purata Peratus Mengikut Mata Pelajaran</p>
             <div className="flex flex-col gap-2.5">
               {(d.uasaSubjek.data ?? []).slice(0, 6).map((sub, i) => (
                 <MkBar key={sub.subject_id} label={sub.subjek} value={sub.purata} fill={BAR_FILL[i % BAR_FILL.length]} />
@@ -82,7 +82,7 @@ export default function Dashboard() {
           <Panel>
             <PanelHead variant="green" icon="📊" tag="Tahun 1–6">Analisis PBD — Tahap Penguasaan</PanelHead>
             <PanelBody>
-              <p className="mb-1 text-[11px] font-semibold text-[#555]">Bilangan Murid Mengikut TP1–TP6</p>
+              <p className="mb-1 text-[13px] font-semibold text-[#555]">Bilangan Murid Mengikut TP1–TP6</p>
               {tpCols.length > 0 ? <ColChart data={tpCols} /> : <p className="py-8 text-center text-[11px] text-ink-soft">Tiada data PBD.</p>}
               <GaugeRow className="mt-3">
                 <GaugeBox tone="red" value={rendah} label={<>Rendah<br />TP1–TP2</>} />
@@ -149,8 +149,8 @@ export default function Dashboard() {
               <div key={a.id} className="flex items-start gap-2.5 rounded-[10px] bg-[#f8f9ff] px-2.5 py-2">
                 <span className="mt-1 size-2.5 shrink-0 rounded-full" style={{ background: ACT_DOT[i % ACT_DOT.length] }} />
                 <div>
-                  <div className="text-[11px] leading-snug text-ink">{a.action}</div>
-                  <div className="text-[10px] text-[#999]">🕐 {formatTarikh(a.created_at)}</div>
+                  <div className="text-[13px] leading-snug text-ink">{a.action}</div>
+                  <div className="text-[11px] text-[#999]">🕐 {formatTarikh(a.created_at)}</div>
                 </div>
               </div>
             ))}

@@ -28,14 +28,14 @@ export function MkStatCard({
   return (
     <div
       className={cn(
-        "relative flex min-w-[100px] flex-1 flex-col items-center overflow-hidden rounded-2xl bg-gradient-to-br p-4 text-white shadow-lg",
+        "relative flex min-w-[120px] flex-1 flex-col items-center overflow-hidden rounded-2xl bg-gradient-to-br p-4 text-white shadow-lg",
         SC[sc],
       )}
     >
-      <div className="absolute -bottom-3.5 -right-3.5 size-14 rounded-full bg-white/10" />
-      <div className="mb-1 text-2xl leading-none">{icon}</div>
-      <div className="text-[26px] font-extrabold leading-none">{value}</div>
-      <div className="mt-1 text-center text-[10px] opacity-90">{label}</div>
+      <div className="absolute -bottom-3.5 -right-3.5 size-16 rounded-full bg-white/10" />
+      <div className="mb-1 text-3xl leading-none">{icon}</div>
+      <div className="text-[30px] font-extrabold leading-none">{value}</div>
+      <div className="mt-1.5 text-center text-[12px] font-medium opacity-90">{label}</div>
     </div>
   );
 }
