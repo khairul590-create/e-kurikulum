@@ -1,14 +1,11 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Download } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { many } from "@/lib/views";
 import { toCSV, downloadCSV } from "@/lib/csv";
-import { Card, CardHeader, CardBody } from "@/components/ui/Card";
-import { Button } from "@/components/ui/Button";
+import { Panel, PanelHead, PanelBody, PageTitle } from "@/components/panel/Panel";
 import { Field, Select } from "@/components/ui/Input";
 import { Badge } from "@/components/ui/Badge";
-import { PageHead } from "@/components/ui/PageHead";
 import { PageLoader } from "@/components/ui/Misc";
 import { useToast } from "@/components/ui/toast";
 import type { KelasPrestasi } from "@/types/db";
@@ -36,25 +33,24 @@ export default function LaporanKelasPage() {
   }
 
   return (
-    <div className="space-y-5">
-      <PageHead title="📋 Laporan Kelas" subtitle="Analisis & senarai murid mengikut kelas" />
+    <div>
+      <PageTitle icon="📋" title="Laporan Kelas" subtitle="Analisis & senarai murid mengikut kelas" />
 
-      <Card>
-        <CardBody className="pt-5">
+      <Panel className="mb-3.5">
+        <PanelBody>
           <Field label="Pilih Kelas">
             <Select value={kelasId} onChange={(e) => setKelasId(e.target.value)}>
               <option value="">— Pilih Kelas —</option>
               {kelas.data?.map((k) => <option key={k.kelas_id} value={k.kelas_id}>{k.kelas}</option>)}
             </Select>
           </Field>
-        </CardBody>
-      </Card>
+        </PanelBody>
+      </Panel>
 
       {sel && (
-        <Card>
-          <CardHeader title={`Ringkasan — ${sel.kelas}`}
-            action={<Button variant="outline" onClick={exportRoster}><Download className="size-4" /> Eksport CSV</Button>} />
-          <CardBody className="space-y-4">
+        <Panel>
+          <PanelHead variant="blue" icon="📋" tag={<button onClick={exportRoster} className="text-white underline">Eksport CSV</button>}>{`Ringkasan — ${sel.kelas}`}</PanelHead>
+          <PanelBody className="space-y-4">
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
               <Mini lab="Bil. Murid" val={sel.bil_murid} />
               <Mini lab="Purata UASA" val={sel.tahun >= 4 ? sel.purata_uasa : "—"} />
@@ -83,8 +79,8 @@ export default function LaporanKelasPage() {
                 </table>
               )}
             </div>
-          </CardBody>
-        </Card>
+          </PanelBody>
+        </Panel>
       )}
     </div>
   );

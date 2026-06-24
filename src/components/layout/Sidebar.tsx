@@ -1,75 +1,77 @@
 import { NavLink } from "react-router-dom";
-import { GraduationCap, LogOut } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 import { navGroups } from "@/config/nav";
 import { useAuth } from "@/providers/AuthProvider";
+import { supabase } from "@/lib/supabase";
 import { cn } from "@/lib/utils";
+import type { SchoolSettings } from "@/types/db";
 
 export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
-  const { isAdmin, signOut, profile } = useAuth();
+  const { isAdmin } = useAuth();
+  const sekolah = useQuery({
+    queryKey: ["school_settings"],
+    queryFn: async () => {
+      const { data } = await supabase.from("school_settings").select("*").eq("id", 1).maybeSingle();
+      return (data ?? null) as SchoolSettings | null;
+    },
+  });
+  const nama = sekolah.data?.nama_sekolah ?? "SK Darau";
+  const sub = sekolah.data?.alamat ?? "Kota Kinabalu, Sabah";
 
   return (
-    <aside className="flex h-full w-[260px] flex-col bg-gradient-to-b from-[#2563eb] to-[#1e3a8a] text-white">
-      {/* Brand */}
-      <div className="flex items-center gap-3 px-5 py-5">
-        <div className="grid size-11 shrink-0 -rotate-6 place-items-center rounded-2xl bg-gradient-to-br from-sun to-sun-deep text-ink shadow-sun">
-          <GraduationCap className="size-5" />
-        </div>
-        <div className="leading-tight">
-          <p className="text-sm font-black">SK Darau</p>
-          <p className="text-[11px] font-bold uppercase tracking-wider text-sun">Kota Kinabalu</p>
+    <aside className="flex h-full w-[225px] flex-col overflow-y-auto bg-gradient-to-b from-[#1a237e] via-[#283593] to-[#3949ab] pb-4">
+      {/* Logo */}
+      <div className="flex items-center gap-2.5 border-b border-white/15 px-4 py-4">
+        <div className="grid size-[42px] shrink-0 place-items-center rounded-full bg-white text-xl">🎓</div>
+        <div className="leading-tight text-white">
+          <div className="text-[11px] font-bold uppercase">{nama}</div>
+          <div className="text-[9px] opacity-75">{sub}</div>
         </div>
       </div>
 
-      <nav className="flex-1 space-y-5 overflow-y-auto px-3 pb-4">
+      {/* Nav */}
+      <nav className="flex-1 pt-1">
         {navGroups.map((g, gi) => {
           const items = g.items.filter((i) => !i.adminOnly || isAdmin);
           if (items.length === 0) return null;
           return (
             <div key={gi}>
-              {g.title && (
-                <p className="px-3 pb-1.5 text-[10px] font-extrabold uppercase tracking-widest text-white/45">
-                  {g.title}
-                </p>
-              )}
-              <div className="space-y-0.5">
-                {items.map((i) => {
-                  const Icon = i.icon;
-                  return (
-                    <NavLink
-                      key={i.to}
-                      to={i.to}
-                      end={i.to === "/"}
-                      onClick={onNavigate}
-                      className={({ isActive }) =>
-                        cn(
-                          "flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-bold transition",
-                          isActive
-                            ? "bg-sun text-ink shadow-sun"
-                            : "text-white/75 hover:bg-white/15 hover:text-white",
-                        )
-                      }
-                    >
-                      <Icon className="size-[18px] shrink-0" />
-                      <span className="truncate">{i.label}</span>
-                    </NavLink>
-                  );
-                })}
+              <div className="px-3 pb-0.5 pt-2.5 text-[9px] font-bold uppercase tracking-[1.2px] text-white/50">
+                {g.title ?? "Dashboard"}
               </div>
+              {items.map((i) => {
+                const Icon = i.icon;
+                return (
+                  <NavLink
+                    key={i.to}
+                    to={i.to}
+                    end={i.to === "/"}
+                    onClick={onNavigate}
+                    className={({ isActive }) =>
+                      cn(
+                        "flex items-center gap-2.5 border-l-[3px] px-4 py-2 text-[12px] font-medium transition",
+                        isActive
+                          ? "border-gold bg-white/[0.16] text-white"
+                          : "border-transparent text-white/85 hover:bg-white/10 hover:text-white",
+                      )
+                    }
+                  >
+                    <Icon className="size-[15px] shrink-0" />
+                    <span className="truncate">{i.label}</span>
+                  </NavLink>
+                );
+              })}
             </div>
           );
         })}
       </nav>
 
-      {/* Footer */}
-      <div className="border-t border-white/10 p-3">
-        <button
-          onClick={() => signOut()}
-          className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-white/70 transition hover:bg-white/10 hover:text-white"
-        >
-          <LogOut className="size-[18px]" />
-          Log Keluar
-        </button>
-        <p className="px-3 pt-2 text-[11px] text-white/40">{profile?.email}</p>
+      {/* Brand badge */}
+      <div className="mt-auto border-t border-white/15 px-4 pt-3.5">
+        <div className="rounded-[10px] bg-gradient-to-br from-[#f9a825] to-[#ff6d00] px-3 py-2.5 text-center text-white">
+          <div className="text-sm font-extrabold tracking-wide">🌟 SMART KURIKULUM</div>
+          <div className="text-[9px] opacity-90">Excellence Together</div>
+        </div>
       </div>
     </aside>
   );

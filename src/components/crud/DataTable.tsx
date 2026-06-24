@@ -63,25 +63,22 @@ export function DataTable<T extends { id: string }>({
         <EmptyState subtitle="Tiada rekod dijumpai." />
       ) : (
         <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+          <table className="data-table">
             <thead>
-              <tr className="border-b border-line text-left text-xs font-semibold uppercase tracking-wide text-ink-soft">
+              <tr>
                 {columns.map((c) => (
-                  <th key={c.key} className="px-3 py-3 whitespace-nowrap">
+                  <th key={c.key} className="whitespace-nowrap">
                     {c.header}
                   </th>
                 ))}
-                {canWrite && <th className="px-3 py-3 text-right">Tindakan</th>}
+                {canWrite && <th className="text-right">Tindakan</th>}
               </tr>
             </thead>
             <tbody>
               {rows.map((row) => (
-                <tr
-                  key={row.id}
-                  className="border-b border-line/70 last:border-0 hover:bg-slate-50/60"
-                >
+                <tr key={row.id}>
                   {columns.map((c) => (
-                    <td key={c.key} className={`px-3 py-3 align-middle ${c.className ?? ""}`}>
+                    <td key={c.key} className={`align-middle ${c.className ?? ""}`}>
                       {c.render
                         ? c.render(row)
                         : String((row as Record<string, unknown>)[c.key] ?? "—")}

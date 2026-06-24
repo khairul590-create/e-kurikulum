@@ -2,9 +2,8 @@ import { useState } from "react";
 import { Download, Users, ClipboardList, BarChart3, HeartPulse, GraduationCap } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { toCSV, downloadCSV } from "@/lib/csv";
-import { Card } from "@/components/ui/Card";
+import { Panel, PageTitle } from "@/components/panel/Panel";
 import { Button } from "@/components/ui/Button";
-import { PageHead } from "@/components/ui/PageHead";
 import { useToast } from "@/components/ui/toast";
 
 const SOURCES = [
@@ -36,20 +35,20 @@ export default function MuatTurunPage() {
   }
 
   return (
-    <div className="space-y-5">
-      <PageHead title="📥 Muat Turun" subtitle="Eksport data kurikulum dalam format CSV (Excel)" />
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <div>
+      <PageTitle icon="📥" title="Muat Turun" subtitle="Eksport data kurikulum dalam format CSV (Excel)" />
+      <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 lg:grid-cols-3">
         {SOURCES.map((s) => {
           const Icon = s.icon;
           return (
-            <Card key={s.key} className="p-5">
+            <Panel key={s.key} className="p-5">
               <div className="grid size-11 place-items-center rounded-2xl bg-brand-50 text-brand"><Icon className="size-5" /></div>
               <h3 className="mt-3 font-bold text-ink">{s.title}</h3>
               <p className="mt-0.5 text-sm text-ink-muted">{s.desc}</p>
               <Button className="mt-4 w-full" variant="outline" loading={busy === s.key} onClick={() => gen(s)}>
                 <Download className="size-4" /> Muat Turun CSV
               </Button>
-            </Card>
+            </Panel>
           );
         })}
       </div>

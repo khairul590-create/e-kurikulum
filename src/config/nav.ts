@@ -8,19 +8,11 @@ import {
   GraduationCap,
   HeartPulse,
   ClipboardCheck,
-  BookOpen,
-  ClipboardList,
   FileText,
-  CalendarDays,
-  Users2,
-  Gauge,
   FileBarChart,
   Download,
   Settings,
   UserCog,
-  Users,
-  BookMarked,
-  DoorOpen,
   LifeBuoy,
   type LucideIcon,
 } from "lucide-react";
@@ -36,6 +28,8 @@ export interface NavGroup {
   items: NavItem[];
 }
 
+// Sidebar ikut mockup V2 (item lain spt RPT/DSKP/Kalendar/PdP/Pentaksiran/SBD/KPI
+// + CRUD Murid/Subjek/Kelas/Bilik kekal sbg route, tapi disorok dari sidebar).
 export const navGroups: NavGroup[] = [
   {
     items: [{ label: "Dashboard", to: "/", icon: LayoutDashboard }],
@@ -51,14 +45,6 @@ export const navGroups: NavGroup[] = [
       { label: "Analisis Murid", to: "/analisis-murid", icon: GraduationCap },
       { label: "Program Intervensi", to: "/intervensi", icon: HeartPulse },
       { label: "Rekod RPH & PdP", to: "/rekod-rph", icon: ClipboardCheck },
-      { label: "Rancangan Pengajaran", to: "/rpt", icon: BookOpen },
-      { label: "RPH", to: "/rph", icon: ClipboardList },
-      { label: "DSKP", to: "/dskp", icon: FileText },
-      { label: "Kalendar Akademik", to: "/kalendar", icon: CalendarDays },
-      { label: "Pelaksanaan PdP", to: "/pdp", icon: GraduationCap },
-      { label: "Pentaksiran", to: "/pentaksiran", icon: ClipboardCheck },
-      { label: "SBD & PLC", to: "/sbd-plc", icon: Users2 },
-      { label: "Dashboard KPI", to: "/kpi", icon: Gauge },
     ],
   },
   {
@@ -74,10 +60,6 @@ export const navGroups: NavGroup[] = [
     items: [
       { label: "Tetapan", to: "/tetapan", icon: Settings, adminOnly: true },
       { label: "Pengguna", to: "/guru", icon: UserCog, adminOnly: true },
-      { label: "Murid", to: "/murid", icon: Users, adminOnly: true },
-      { label: "Mata Pelajaran", to: "/subjek", icon: BookMarked, adminOnly: true },
-      { label: "Kelas", to: "/kelas", icon: School, adminOnly: true },
-      { label: "Bilik & Kemudahan", to: "/bilik", icon: DoorOpen, adminOnly: true },
       { label: "Bantuan", to: "/bantuan", icon: LifeBuoy },
     ],
   },

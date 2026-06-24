@@ -65,6 +65,24 @@
   .btn-sun:hover {
     @apply -translate-y-0.5 scale-[1.02];
   }
+
+  /* ââ MOCKUP V2 ââ */
+  .mk-panel {
+    @apply overflow-hidden rounded-2xl bg-white;
+    box-shadow: 0 2px 16px rgba(80, 100, 200, 0.1), 0 1px 4px rgba(0, 0, 0, 0.05);
+  }
+  .data-table {
+    @apply w-full border-collapse text-[12px];
+  }
+  .data-table th {
+    @apply border-b-2 border-[#e8eaf6] bg-[#f8f9ff] px-2.5 py-2 text-left text-[10px] font-bold uppercase tracking-wide text-[#555];
+  }
+  .data-table td {
+    @apply border-b border-[#f0f0f0] px-2.5 py-2 align-middle;
+  }
+  .data-table tbody tr:hover td {
+    @apply bg-[#f8f9ff];
+  }
 }
 
 @layer utilities {

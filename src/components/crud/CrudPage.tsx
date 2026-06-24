@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { Field, Input, Select, Textarea } from "@/components/ui/Input";
 import { PageLoader } from "@/components/ui/Misc";
 import { Card } from "@/components/ui/Card";
+import { PageTitle } from "@/components/panel/Panel";
 import { useList, useCreate, useUpdate, useRemove, logActivity } from "@/lib/crud";
 import { useToast } from "@/components/ui/toast";
 import { useAuth } from "@/providers/AuthProvider";
@@ -95,18 +96,16 @@ export function CrudPage<T extends { id: string }>({
   }
 
   return (
-    <div className="space-y-5">
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h1 className="text-xl font-bold text-ink">{config.title}</h1>
-          {config.subtitle && <p className="text-sm text-ink-muted mt-0.5">{config.subtitle}</p>}
-        </div>
-        {canWrite && (
+    <div className="space-y-4">
+      <PageTitle
+        title={config.title}
+        subtitle={config.subtitle}
+        action={canWrite && (
           <Button onClick={openAdd}>
             <Plus className="size-4" /> Tambah {config.singular}
           </Button>
         )}
-      </div>
+      />
 
       <Card className="p-5">
         {list.isLoading ? (

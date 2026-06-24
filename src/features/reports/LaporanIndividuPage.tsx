@@ -1,13 +1,10 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Download } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { toCSV, downloadCSV } from "@/lib/csv";
-import { Card, CardHeader, CardBody } from "@/components/ui/Card";
-import { Button } from "@/components/ui/Button";
+import { Panel, PanelHead, PanelBody, PageTitle } from "@/components/panel/Panel";
 import { Field, Select } from "@/components/ui/Input";
 import { Badge } from "@/components/ui/Badge";
-import { PageHead } from "@/components/ui/PageHead";
 import { PageLoader } from "@/components/ui/Misc";
 import { useToast } from "@/components/ui/toast";
 import { GRED_COLOR } from "@/components/charts/Bars";
@@ -52,25 +49,24 @@ export default function LaporanIndividuPage() {
   }
 
   return (
-    <div className="space-y-5">
-      <PageHead title="📄 Laporan Individu" subtitle="Slip keputusan UASA & prestasi individu murid" />
+    <div>
+      <PageTitle icon="📄" title="Laporan Individu" subtitle="Slip keputusan UASA & prestasi individu murid" />
 
-      <Card>
-        <CardBody className="pt-5">
+      <Panel className="mb-3.5">
+        <PanelBody>
           <Field label="Pilih Murid">
             <Select value={studentId} onChange={(e) => setStudentId(e.target.value)}>
               <option value="">— Pilih Murid —</option>
               {students.data?.map((s) => <option key={s.id} value={s.id}>{s.nama}</option>)}
             </Select>
           </Field>
-        </CardBody>
-      </Card>
+        </PanelBody>
+      </Panel>
 
       {studentId && (
-        <Card>
-          <CardHeader title={`Slip Keputusan UASA — ${sel?.nama ?? ""}`}
-            action={<Button variant="outline" onClick={exportSlip}><Download className="size-4" /> Eksport</Button>} />
-          <CardBody className="pt-1">
+        <Panel>
+          <PanelHead variant="blue" icon="📄" tag={<button onClick={exportSlip} className="text-white underline">Eksport</button>}>{`Slip Keputusan UASA — ${sel?.nama ?? ""}`}</PanelHead>
+          <PanelBody className="px-3 py-2">
             {scores.isLoading ? <PageLoader /> : rows.length === 0 ? (
               <p className="py-8 text-center text-sm text-ink-soft">Tiada markah UASA untuk murid ini.</p>
             ) : (
@@ -101,8 +97,8 @@ export default function LaporanIndividuPage() {
                 </table>
               </>
             )}
-          </CardBody>
-        </Card>
+          </PanelBody>
+        </Panel>
       )}
     </div>
   );

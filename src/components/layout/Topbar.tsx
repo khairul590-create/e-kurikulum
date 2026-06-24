@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Menu, Bell, ChevronDown } from "lucide-react";
+import { Menu, ChevronDown } from "lucide-react";
 import * as Dropdown from "@radix-ui/react-dropdown-menu";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/providers/AuthProvider";
@@ -20,21 +20,20 @@ export function Topbar({ onMenu, title }: { onMenu: () => void; title: string })
       return (data ?? null) as SchoolSettings | null;
     },
   });
+  const nama = sekolah.data?.nama_sekolah ?? "SK Darau";
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center gap-3 border-b-2 border-line bg-white/90 px-4 backdrop-blur lg:px-6">
+    <header className="sticky top-0 z-30 flex h-16 items-center gap-3 bg-gradient-to-r from-[#1a237e] via-[#283593] to-[#3949ab] px-4 text-white lg:px-6">
       <button
         onClick={onMenu}
-        className="grid size-9 place-items-center rounded-lg text-ink-muted hover:bg-slate-100 lg:hidden"
+        className="grid size-9 place-items-center rounded-lg text-white/80 hover:bg-white/10 lg:hidden"
       >
         <Menu className="size-5" />
       </button>
 
       <div className="min-w-0">
-        <h1 className="truncate text-base font-semibold text-ink lg:text-lg">{title}</h1>
-        {sekolah.data?.nama_sekolah && (
-          <p className="hidden truncate text-[11px] font-medium text-ink-muted sm:block">{sekolah.data.nama_sekolah}</p>
-        )}
+        <h1 className="truncate text-base font-extrabold tracking-tight lg:text-lg">{title}</h1>
+        <p className="hidden truncate font-display text-[11px] font-semibold italic text-gold sm:block">{nama}</p>
       </div>
 
       <div className="ml-auto flex items-center gap-2 lg:gap-3">
@@ -42,7 +41,7 @@ export function Topbar({ onMenu, title }: { onMenu: () => void; title: string })
         <select
           value={year ?? current?.label ?? ""}
           onChange={(e) => setYear(e.target.value)}
-          className="hidden h-9 cursor-pointer rounded-xl border border-line bg-white px-3 text-sm font-medium text-ink outline-none focus:border-brand sm:block"
+          className="hidden h-9 cursor-pointer rounded-xl border border-white/25 bg-white/15 px-3 text-sm font-medium text-white outline-none [&>option]:text-ink sm:block"
         >
           {(years.data ?? []).map((y) => (
             <option key={y.id} value={y.label}>
@@ -51,25 +50,21 @@ export function Topbar({ onMenu, title }: { onMenu: () => void; title: string })
           ))}
         </select>
 
-        {/* Notifications */}
-        <button className="relative grid size-9 place-items-center rounded-xl text-ink-muted hover:bg-slate-100">
-          <Bell className="size-5" />
-          <span className="absolute right-1.5 top-1.5 grid size-4 place-items-center rounded-full bg-danger text-[9px] font-bold text-white">
-            3
-          </span>
-        </button>
-
-        {/* Profile */}
+        {/* Profile chip */}
         <Dropdown.Root>
-          <Dropdown.Trigger className="flex items-center gap-2 rounded-xl px-1.5 py-1 outline-none hover:bg-slate-100">
-            <div className="grid size-9 place-items-center rounded-full bg-navy-800 text-sm font-semibold text-white">
+          <Dropdown.Trigger className="flex items-center gap-2.5 rounded-xl bg-white/15 px-3 py-1.5 outline-none transition hover:bg-white/25">
+            <div className="grid size-9 place-items-center rounded-full bg-white/25 text-sm font-semibold text-white">
               {initials(profile?.nama)}
             </div>
             <div className="hidden text-left leading-tight sm:block">
-              <p className="text-sm font-semibold text-ink">{profile?.nama ?? "Pengguna"}</p>
-              <p className="text-[11px] text-ink-muted">{profile?.jawatan ?? "Guru"}</p>
+              <p className="text-[12px] font-semibold text-white">{profile?.nama ?? "Pengguna"}</p>
+              <p className="text-[10px] text-white/85">{profile?.jawatan ?? "Guru"}</p>
+              <div className="mt-0.5 flex items-center gap-1">
+                <span className="size-1.5 rounded-full bg-[#69f0ae]" />
+                <span className="text-[9px] text-[#69f0ae]">Online</span>
+              </div>
             </div>
-            <ChevronDown className="hidden size-4 text-ink-soft sm:block" />
+            <ChevronDown className="hidden size-4 text-white/70 sm:block" />
           </Dropdown.Trigger>
           <Dropdown.Portal>
             <Dropdown.Content

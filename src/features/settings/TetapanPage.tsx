@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import * as Tabs from "@radix-ui/react-tabs";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Card, CardBody } from "@/components/ui/Card";
+import { PageTitle } from "@/components/panel/Panel";
 import { Button } from "@/components/ui/Button";
 import { Field, Input, Textarea, Select } from "@/components/ui/Input";
 import { CrudPage } from "@/components/crud/CrudPage";
@@ -29,11 +30,8 @@ const tabTrigger =
 export default function TetapanPage() {
   const { isAdmin } = useAuth();
   return (
-    <div className="space-y-5">
-      <div>
-        <h1 className="text-xl font-bold text-ink">Tetapan</h1>
-        <p className="text-sm text-ink-muted">Konfigurasi sekolah, profil & pengumuman</p>
-      </div>
+    <div className="space-y-4">
+      <PageTitle icon="⚙️" title="Tetapan" subtitle="Konfigurasi sekolah, profil, kepimpinan & pengumuman" />
 
       <Tabs.Root defaultValue="profil">
         <Tabs.List className="inline-flex gap-1 rounded-2xl bg-slate-100 p-1">
