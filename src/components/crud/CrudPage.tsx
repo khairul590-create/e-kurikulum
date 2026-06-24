@@ -86,9 +86,17 @@ export function CrudPage<T extends { id: string }>({
 
   async function doDelete() {
     if (!confirmDel) return;
+    const detail = (confirmDel as Record<string, unknown>)["nama"] as string | undefined ?? confirmDel.id;
     try {
       await remove.mutateAsync(confirmDel.id);
       toast("success", `${config.singular} dipadam`);
+      void logActivity({
+        actor_id: profile?.id,
+        actor_nama: profile?.nama,
+        action: `${config.singular} Dipadam`,
+        modul: config.title,
+        detail,
+      });
     } catch (e) {
       toast("error", (e as Error).message ?? "Ralat memadam");
     }

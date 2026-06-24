@@ -10,7 +10,7 @@ import type { CrudConfig } from "@/components/crud/types";
 import { PageLoader } from "@/components/ui/Misc";
 import { Badge } from "@/components/ui/Badge";
 import { supabase } from "@/lib/supabase";
-import { useOptions, useList } from "@/lib/crud";
+import { useOptions, useList, logActivity } from "@/lib/crud";
 import { useToast } from "@/components/ui/toast";
 import { useAuth } from "@/providers/AuthProvider";
 import { formatTarikh, cn } from "@/lib/utils";
@@ -99,6 +99,7 @@ function ProfilTab() {
     else {
       toast("success", "Profil dikemaskini");
       await refreshProfile();
+      void logActivity({ actor_id: profile.id, actor_nama: profile.nama, action: "Profil Dikemaskini", modul: "Tetapan" });
     }
   }
 
@@ -159,6 +160,7 @@ function SekolahTab() {
     else {
       toast("success", "Tetapan sekolah dikemaskini");
       qc.invalidateQueries({ queryKey: ["school_settings"] });
+      void logActivity({ action: "Tetapan Sekolah Dikemaskini", modul: "Tetapan", detail: form.nama_sekolah });
     }
   }
 
@@ -248,6 +250,7 @@ function KepimpinanTab() {
     else {
       toast("success", "Barisan pentadbiran dikemaskini");
       qc.invalidateQueries({ queryKey: ["school_settings"] });
+      void logActivity({ actor_id: profile?.id, actor_nama: profile?.nama, action: "Barisan Pentadbiran Dikemaskini", modul: "Tetapan" });
     }
   }
 
@@ -303,6 +306,7 @@ function AksesList({ currentId }: { currentId?: string }) {
     else {
       toast("success", `${p.nama} ditetapkan sebagai ${role === "admin" ? "Admin" : "Guru"}`);
       qc.invalidateQueries({ queryKey: ["profiles"] });
+      void logActivity({ action: `Peranan Ditukar: ${p.nama} → ${role}`, modul: "Akses", detail: p.email ?? undefined });
     }
   }
 

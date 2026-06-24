@@ -38,6 +38,7 @@ const SubjectsPage = lazy(() => import("@/features/subjects/SubjectsPage"));
 const ClassesPage = lazy(() => import("@/features/classes/ClassesPage"));
 const RoomsPage = lazy(() => import("@/features/rooms/RoomsPage"));
 const TetapanPage = lazy(() => import("@/features/settings/TetapanPage"));
+const AuditLogPage = lazy(() => import("@/features/audit/AuditLogPage"));
 const BantuanPage = lazy(() => import("@/features/help/BantuanPage"));
 
 const wrap = (el: React.ReactNode) => <Suspense fallback={<PageLoader />}>{el}</Suspense>;
@@ -81,6 +82,7 @@ export const router = createBrowserRouter([
       { path: "kelas", element: admin(<ClassesPage />) },
       { path: "bilik", element: admin(<RoomsPage />) },
       { path: "tetapan", element: admin(<TetapanPage />) },
+      { path: "audit-log", element: admin(<AuditLogPage />) },
       { path: "bantuan", element: wrap(<BantuanPage />) },
     ],
   },

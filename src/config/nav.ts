@@ -14,6 +14,7 @@ import {
   Settings,
   UserCog,
   LifeBuoy,
+  ClipboardList,
   type LucideIcon,
 } from "lucide-react";
 
@@ -60,6 +61,7 @@ export const navGroups: NavGroup[] = [
     items: [
       { label: "Tetapan", to: "/tetapan", icon: Settings, adminOnly: true },
       { label: "Pengguna", to: "/guru", icon: UserCog, adminOnly: true },
+      { label: "Log Audit", to: "/audit-log", icon: ClipboardList, adminOnly: true },
       { label: "Bantuan", to: "/bantuan", icon: LifeBuoy },
     ],
   },
