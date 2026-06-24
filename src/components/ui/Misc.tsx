@@ -40,7 +40,7 @@ export function Progress({ value, color }: { value: number; color?: string }) {
     <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100">
       <div
         className="h-full rounded-full transition-all"
-        style={{ width: `${Math.min(100, value)}%`, background: color ?? "#2563EB" }}
+        style={{ width: `${Math.max(0, Math.min(100, Number(value) || 0))}%`, background: color ?? "#2563EB" }}
       />
     </div>
   );

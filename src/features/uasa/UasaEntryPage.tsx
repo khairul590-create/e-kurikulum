@@ -56,14 +56,18 @@ export default function UasaEntryPage() {
     if (!selKelas) return;
     setSaving(true);
     try {
-      // cari atau cipta rekod UASA
-      const { data: existing } = await supabase.from("uasa_records").select("id")
-        .eq("subject_id", subjectId).eq("kelas_id", kelasId).eq("tahun", selKelas.tahun).maybeSingle();
-      let uasaId = existing?.id as string | undefined;
+      // cari atau cipta rekod UASA (ikut SESI/year_id supaya tak tindih markah sesi lama)
+      const yearId = year.data?.id ?? null;
+      let q = supabase.from("uasa_records").select("id")
+        .eq("subject_id", subjectId).eq("kelas_id", kelasId).eq("tahun", selKelas.tahun);
+      q = yearId ? q.eq("year_id", yearId) : q.is("year_id", null);
+      const { data: existRows, error: findErr } = await q.order("created_at", { ascending: true }).limit(1);
+      if (findErr) throw findErr;
+      let uasaId = existRows?.[0]?.id as string | undefined;
       if (!uasaId) {
         const { data, error } = await supabase.from("uasa_records").insert({
           subject_id: subjectId, kelas_id: kelasId, tahun: selKelas.tahun,
-          year_id: year.data?.id ?? null, guru_id: profile?.id ?? null,
+          year_id: yearId, guru_id: profile?.id ?? null,
         }).select("id").single();
         if (error) throw error;
         uasaId = data.id;

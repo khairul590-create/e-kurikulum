@@ -66,7 +66,7 @@ export default function AnalisisMuridPage() {
           <PanelHead variant="orange" icon="⚠️">Murid Perlu Bimbingan</PanelHead>
           <PanelBody className="px-3 py-2">
             <table className="data-table">
-              <thead><tr><th>Nama</th><th>Kelas</th><th>Markah</th><th>Status</th></tr></thead>
+              <thead><tr><th>Nama</th><th>Kelas</th><th>Purata</th><th>Status</th></tr></thead>
               <tbody>
                 {bimbingan.map((r) => (
                   <tr key={r.student_id}>

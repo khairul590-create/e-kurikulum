@@ -208,7 +208,7 @@ select
   k.tahun            as tahun,
   count(sc.*)        as bil_subjek,
   round(avg(sc.markah), 1) as purata,
-  min(sc.gred)       as gred_terendah
+  max(sc.gred)       as gred_terendah
 from students st
 join uasa_scores sc on sc.student_id = st.id
 left join classes k on k.id = st.kelas_id
@@ -396,3 +396,10 @@ create policy "panitia_fail_write" on panitia_fail for all to authenticated
   );
 
 grant select, insert, update, delete on panitia_fail to authenticated;
+
+-- >>>>>>>>>> BAHAGIAN 5/5 : 0008_school_leadership.sql <<<<<<<<<<
+alter table school_settings add column if not exists guru_besar_id uuid references profiles(id) on delete set null;
+alter table school_settings add column if not exists pk1_id        uuid references profiles(id) on delete set null;
+alter table school_settings add column if not exists pk_hem_id     uuid references profiles(id) on delete set null;
+alter table school_settings add column if not exists pk_koko_id    uuid references profiles(id) on delete set null;
+alter table school_settings add column if not exists pk_petang_id  uuid references profiles(id) on delete set null;

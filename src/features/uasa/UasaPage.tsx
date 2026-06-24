@@ -17,7 +17,10 @@ export default function UasaPage() {
   const donut = overall.map((g) => ({ name: `Gred ${g.gred}`, value: g.bilangan, color: GRED_COLOR[g.gred] }));
   const total = overall.reduce((s, g) => s + g.bilangan, 0);
   const pass = u.pass.data ?? [];
-  const purataLulus = pass.length ? Math.round(pass.reduce((s, p) => s + p.peratus_lulus, 0) / pass.length) : 0;
+  const totSkor = pass.reduce((s, p) => s + p.jumlah, 0);
+  const purataLulus = totSkor
+    ? Math.round((100 * pass.reduce((s, p) => s + (p.peratus_lulus / 100) * p.jumlah, 0)) / totSkor)
+    : 0;
   const gredAB = total
     ? Math.round((100 * overall.filter((g) => g.gred === "A" || g.gred === "B").reduce((s, g) => s + g.bilangan, 0)) / total)
     : 0;
@@ -66,7 +69,11 @@ export default function UasaPage() {
           <Panel>
             <PanelHead variant="green" icon="🍩">Agihan Gred Keseluruhan</PanelHead>
             <PanelBody className="flex flex-col items-center gap-4 sm:flex-row">
-              <DonutChart data={donut} centerLabel="Skor" centerValue={String(total)} />
+              {total > 0 ? (
+                <DonutChart data={donut} centerLabel="Skor" centerValue={String(total)} />
+              ) : (
+                <div className="grid h-44 w-44 place-items-center text-[11px] text-ink-soft">Tiada data</div>
+              )}
               <div className="flex flex-col gap-1.5">
                 {overall.map((g) => (
                   <div key={g.gred} className="flex items-center gap-2 text-[11px]">

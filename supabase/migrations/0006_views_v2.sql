@@ -73,7 +73,7 @@ select
   k.tahun            as tahun,
   count(sc.*)        as bil_subjek,
   round(avg(sc.markah), 1) as purata,
-  min(sc.gred)       as gred_terendah
+  max(sc.gred)       as gred_terendah
 from students st
 join uasa_scores sc on sc.student_id = st.id
 left join classes k on k.id = st.kelas_id

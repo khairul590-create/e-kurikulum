@@ -9,7 +9,7 @@ export function MkBar({ label, value, fill }: { label: ReactNode; value: number;
       <div className="relative h-[22px] flex-1 overflow-hidden rounded-[20px] bg-[#eef2ff]">
         <div
           className={cn("flex h-full items-center justify-end rounded-[20px] bg-gradient-to-r px-2 text-[10px] font-bold text-white transition-all", fill)}
-          style={{ width: `${Math.min(100, value)}%` }}
+          style={{ width: `${Math.max(0, Math.min(100, Number(value) || 0))}%` }}
         >
           {value}%
         </div>

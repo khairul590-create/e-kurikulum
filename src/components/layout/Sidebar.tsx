@@ -16,7 +16,7 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
     },
   });
   const nama = sekolah.data?.nama_sekolah ?? "SK Darau";
-  const sub = sekolah.data?.alamat ?? "Kota Kinabalu, Sabah";
+  const sub = sekolah.data?.subtajuk ?? sekolah.data?.alamat ?? "Kota Kinabalu, Sabah";
 
   return (
     <aside className="flex h-full w-[225px] flex-col overflow-y-auto bg-gradient-to-b from-[#1a237e] via-[#283593] to-[#3949ab] pb-4">

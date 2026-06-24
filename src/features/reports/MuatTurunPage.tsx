@@ -8,12 +8,18 @@ import { useToast } from "@/components/ui/toast";
 
 const SOURCES = [
   { key: "students", title: "Senarai Murid", desc: "Semua murid, kelas & status", icon: Users, table: "students", select: "nama, no_sijil_lahir, jantina, status" },
-  { key: "uasa", title: "Markah UASA", desc: "Markah & gred UASA murid", icon: BarChart3, table: "uasa_scores", select: "markah, gred, lulus" },
+  { key: "uasa", title: "Markah UASA", desc: "Markah & gred UASA murid", icon: BarChart3, table: "uasa_scores", select: "markah, gred, lulus, students(nama), uasa_records(tahun, subjects(nama))" },
   { key: "pbd", title: "Pentaksiran (PBD)", desc: "Markah & tahap penguasaan", icon: GraduationCap, table: "assessment_scores", select: "markah, tp_level, tahap" },
   { key: "rph", title: "Status RPH", desc: "Rekod & status pelaksanaan RPH", icon: ClipboardList, table: "rph", select: "tarikh, tajuk, status, minggu" },
   { key: "panitia", title: "Prestasi Panitia", desc: "Ringkasan prestasi panitia", icon: BarChart3, table: "v_panitia_prestasi", select: "subjek, ketua, bil_guru, purata_uasa, purata_tp, status" },
   { key: "intervensi", title: "Program Intervensi", desc: "Senarai program & kemajuan", icon: HeartPulse, table: "v_intervensi_ringkasan", select: "nama, jenis, sasaran, bil_murid, kemajuan, status" },
 ];
+
+interface UasaRow {
+  markah: number; gred: string; lulus: boolean;
+  students: { nama: string } | null;
+  uasa_records: { tahun: number; subjects: { nama: string } | null } | null;
+}
 
 export default function MuatTurunPage() {
   const toast = useToast();
@@ -25,7 +31,16 @@ export default function MuatTurunPage() {
       const { data, error } = await supabase.from(s.table).select(s.select).limit(5000);
       if (error) throw error;
       if (!data || data.length === 0) { toast("info", "Tiada data untuk dieksport"); return; }
-      downloadCSV(`${s.key}-${new Date().toISOString().slice(0, 10)}.csv`, toCSV(data as unknown as Record<string, unknown>[]));
+      let rows = data as unknown as Record<string, unknown>[];
+      if (s.key === "uasa") {
+        rows = (data as unknown as UasaRow[]).map((r) => ({
+          nama: r.students?.nama ?? "—",
+          subjek: r.uasa_records?.subjects?.nama ?? "—",
+          tahun: r.uasa_records?.tahun ?? "",
+          markah: r.markah, gred: r.gred, keputusan: r.lulus ? "Lulus" : "Gagal",
+        }));
+      }
+      downloadCSV(`${s.key}-${new Date().toISOString().slice(0, 10)}.csv`, toCSV(rows));
       toast("success", `${s.title} dijana`);
     } catch (e) {
       toast("error", (e as Error).message);

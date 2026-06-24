@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Plus, Pencil, Trash2 } from "lucide-react";
 import { many } from "@/lib/views";
+import { supabase } from "@/lib/supabase";
 import { useCreate, useUpdate, useRemove, useOptions, logActivity } from "@/lib/crud";
 import { Panel, PanelHead, PanelBody, PageTitle, InfoNote } from "@/components/panel/Panel";
 import { MkStatCard, StatRow } from "@/components/panel/MkStatCard";
@@ -48,9 +49,15 @@ export default function IntervensiPage() {
     form.reset({ nama: "", jenis: "", sasaran: "", guru_id: "", subject_id: "", kemajuan: "0", status: "dirancang" });
     setOpen(true);
   }
-  function openEdit(r: IntervensiRingkasan) {
+  async function openEdit(r: IntervensiRingkasan) {
     setEditing(r);
-    form.reset({ nama: r.nama, jenis: r.jenis ?? "", sasaran: r.sasaran ?? "", guru_id: "", subject_id: "", kemajuan: String(r.kemajuan), status: r.status });
+    // ringkasan view tiada FK id — ambil dari jadual asal supaya edit tak padam guru/subjek
+    const { data } = await supabase.from("intervensi_programs").select("guru_id, subject_id").eq("id", r.id).maybeSingle();
+    form.reset({
+      nama: r.nama, jenis: r.jenis ?? "", sasaran: r.sasaran ?? "",
+      guru_id: (data?.guru_id as string) ?? "", subject_id: (data?.subject_id as string) ?? "",
+      kemajuan: String(r.kemajuan), status: r.status,
+    });
     setOpen(true);
   }
   async function onSubmit(v: Form) {
