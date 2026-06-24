@@ -24,13 +24,13 @@ export default function StudentsPage() {
     subtitle: "Pengurusan maklumat murid sekolah",
     table: "students",
     singular: "Murid",
-    select: "*, classes(nama)",
+    select: isAdmin ? "*, classes(nama)" : "id, nama, jantina, status, tarikh_masuk, classes(nama)",
     orderBy: "nama",
     ascending: true,
-    searchKeys: ["nama", "no_sijil_lahir"],
+    searchKeys: isAdmin ? ["nama", "no_sijil_lahir"] : ["nama"],
     columns: [
       { key: "nama", header: "Nama", render: (r) => <span className="font-medium text-ink">{r.nama}</span> },
-      { key: "no_sijil_lahir", header: "No. Sijil Lahir" },
+      ...(isAdmin ? [{ key: "no_sijil_lahir" as keyof Row, header: "No. Sijil Lahir" }] : []),
       { key: "jantina", header: "Jantina", render: (r) => (r.jantina === "L" ? "Lelaki" : "Perempuan") },
       { key: "kelas", header: "Kelas", render: (r) => r.classes?.nama ?? "—" },
       { key: "tarikh_masuk", header: "Tarikh Masuk", render: (r) => formatTarikh(r.tarikh_masuk) },
@@ -42,7 +42,7 @@ export default function StudentsPage() {
     ],
     fields: [
       { name: "nama", label: "Nama Penuh", required: true, full: true },
-      { name: "no_sijil_lahir", label: "No. Sijil Lahir" },
+      ...(isAdmin ? [{ name: "no_sijil_lahir" as keyof Row, label: "No. Sijil Lahir" }] : []),
       {
         name: "jantina",
         label: "Jantina",

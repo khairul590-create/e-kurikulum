@@ -29,11 +29,9 @@ GRANT EXECUTE ON FUNCTION fn_tahun_prestasi(uuid) TO authenticated;
 
 
 -- ── 2. Tukar kata laluan akaun admin ──
--- Kata laluan baru: kuri@skdarau2026
-
-UPDATE auth.users
-SET encrypted_password = crypt('kuri@skdarau2026', gen_salt('bf'))
-WHERE email = 'admin@kurikulum.test';
+-- JANGAN simpan kata laluan dalam SQL.
+-- Tukar melalui Supabase Dashboard:
+-- Authentication → Users → admin@kurikulum.test → Reset Password
 
 
 -- ── 3. Pastikan activities hanya boleh INSERT oleh authenticated ──

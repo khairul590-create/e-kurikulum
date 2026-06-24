@@ -35,9 +35,12 @@ export default defineConfig({
         navigateFallbackDenylist: [/^\/api/],
         runtimeCaching: [
           {
-            urlPattern: ({ url }) => url.pathname.startsWith("/rest/v1"),
-            handler: "NetworkFirst",
-            options: { cacheName: "supabase-api", networkTimeoutSeconds: 5 },
+            // Supabase API calls must NOT be cached — student data must not persist in browser
+            urlPattern: ({ url }) =>
+              url.hostname.endsWith(".supabase.co") ||
+              url.pathname.startsWith("/rest/v1") ||
+              url.pathname.startsWith("/auth/v1"),
+            handler: "NetworkOnly",
           },
         ],
       },
@@ -48,5 +51,9 @@ export default defineConfig({
   },
   build: {
     sourcemap: false,
+  },
+  esbuild: {
+    // Strip console.* and debugger from production builds
+    drop: ["console", "debugger"],
   },
 });

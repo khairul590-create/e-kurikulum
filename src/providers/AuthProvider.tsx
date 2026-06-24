@@ -64,9 +64,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return { error: error?.message };
     },
     async signOut() {
-      await supabase.auth.signOut();
-      // Buang semua cache data murid dari memori selepas log keluar
+      // Clear data from memory and PWA caches before signing out
       queryClient.clear();
+      if ("caches" in window) {
+        const keys = await caches.keys();
+        await Promise.all(keys.map((k) => caches.delete(k)));
+      }
+      await supabase.auth.signOut();
     },
     async refreshProfile() {
       if (session) await loadProfile(session.user.id);
