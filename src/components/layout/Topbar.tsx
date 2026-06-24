@@ -1,16 +1,25 @@
 import { useState } from "react";
 import { Menu, Bell, ChevronDown } from "lucide-react";
 import * as Dropdown from "@radix-ui/react-dropdown-menu";
+import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/providers/AuthProvider";
 import { initials } from "@/lib/utils";
 import { useList } from "@/lib/crud";
-import type { AcademicYear } from "@/types/db";
+import { supabase } from "@/lib/supabase";
+import type { AcademicYear, SchoolSettings } from "@/types/db";
 
 export function Topbar({ onMenu, title }: { onMenu: () => void; title: string }) {
   const { profile, signOut } = useAuth();
   const years = useList<AcademicYear>("academic_years", { orderBy: "label" });
   const current = years.data?.find((y) => y.is_current);
   const [year, setYear] = useState<string>();
+  const sekolah = useQuery({
+    queryKey: ["school_settings"],
+    queryFn: async () => {
+      const { data } = await supabase.from("school_settings").select("*").eq("id", 1).maybeSingle();
+      return (data ?? null) as SchoolSettings | null;
+    },
+  });
 
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center gap-3 border-b-2 border-line bg-white/90 px-4 backdrop-blur lg:px-6">
@@ -21,7 +30,12 @@ export function Topbar({ onMenu, title }: { onMenu: () => void; title: string })
         <Menu className="size-5" />
       </button>
 
-      <h1 className="text-base font-semibold text-ink lg:text-lg">{title}</h1>
+      <div className="min-w-0">
+        <h1 className="truncate text-base font-semibold text-ink lg:text-lg">{title}</h1>
+        {sekolah.data?.nama_sekolah && (
+          <p className="hidden truncate text-[11px] font-medium text-ink-muted sm:block">{sekolah.data.nama_sekolah}</p>
+        )}
+      </div>
 
       <div className="ml-auto flex items-center gap-2 lg:gap-3">
         {/* Year selector */}

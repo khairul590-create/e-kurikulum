@@ -2,16 +2,18 @@ import { CrudPage } from "@/components/crud/CrudPage";
 import type { CrudConfig } from "@/components/crud/types";
 import { Badge } from "@/components/ui/Badge";
 import { useAuth } from "@/providers/AuthProvider";
+import { useOptions } from "@/lib/crud";
 import type { Profile } from "@/types/db";
 
 export default function TeachersPage() {
   const { isAdmin } = useAuth();
+  const subjectOpts = useOptions("subjects", "nama", { orderBy: "nama" });
 
   const config: CrudConfig<Profile> = {
-    title: "Guru",
-    subtitle: "Senarai guru & kakitangan akademik",
+    title: "Pengguna",
+    subtitle: "Senarai guru, kakitangan akademik & ketua panitia",
     table: "profiles",
-    singular: "Guru",
+    singular: "Pengguna",
     orderBy: "nama",
     ascending: true,
     searchKeys: ["nama", "email", "jawatan"],
@@ -59,8 +61,10 @@ export default function TeachersPage() {
           { value: "tidak_aktif", label: "Tidak Aktif" },
         ],
       },
+      { name: "panitia_subject_id", label: "Panitia (Mata Pelajaran)", type: "select" },
+      { name: "is_ketua_panitia", label: "Ketua Panitia?", type: "checkbox" },
     ],
   };
 
-  return <CrudPage config={config} canWrite={isAdmin} />;
+  return <CrudPage config={config} canWrite={isAdmin} extraFieldOptions={{ panitia_subject_id: subjectOpts.data ?? [] }} />;
 }

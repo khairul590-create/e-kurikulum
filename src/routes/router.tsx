@@ -7,6 +7,21 @@ import { PageLoader } from "@/components/ui/Misc";
 const Login = lazy(() => import("@/pages/Login"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
 const Dashboard = lazy(() => import("@/features/dashboard/Dashboard"));
+// V2 analisis
+const UasaPage = lazy(() => import("@/features/uasa/UasaPage"));
+const UasaEntryPage = lazy(() => import("@/features/uasa/UasaEntryPage"));
+const PbdPage = lazy(() => import("@/features/pbd/PbdPage"));
+const PanitiaPage = lazy(() => import("@/features/panitia/PanitiaPage"));
+const PanitiaDetailPage = lazy(() => import("@/features/panitia/PanitiaDetailPage"));
+const AnalisisKelasPage = lazy(() => import("@/features/analisis-kelas/AnalisisKelasPage"));
+const AnalisisTahunPage = lazy(() => import("@/features/analisis-tahun/AnalisisTahunPage"));
+const AnalisisMuridPage = lazy(() => import("@/features/analisis-murid/AnalisisMuridPage"));
+const IntervensiPage = lazy(() => import("@/features/intervensi/IntervensiPage"));
+const RekodRphPage = lazy(() => import("@/features/rekod-rph/RekodRphPage"));
+const LaporanIndividuPage = lazy(() => import("@/features/reports/LaporanIndividuPage"));
+const LaporanKelasPage = lazy(() => import("@/features/reports/LaporanKelasPage"));
+const MuatTurunPage = lazy(() => import("@/features/reports/MuatTurunPage"));
+// sedia ada
 const RptPage = lazy(() => import("@/features/rpt/RptPage"));
 const RphPage = lazy(() => import("@/features/rph/RphPage"));
 const DskpPage = lazy(() => import("@/features/dskp/DskpPage"));
@@ -39,6 +54,21 @@ export const router = createBrowserRouter([
     ),
     children: [
       { index: true, element: wrap(<Dashboard />) },
+      // V2 analisis
+      { path: "uasa", element: wrap(<UasaPage />) },
+      { path: "uasa/entry", element: admin(<UasaEntryPage />) },
+      { path: "pbd", element: wrap(<PbdPage />) },
+      { path: "panitia", element: wrap(<PanitiaPage />) },
+      { path: "panitia/:subjectId", element: wrap(<PanitiaDetailPage />) },
+      { path: "analisis-kelas", element: wrap(<AnalisisKelasPage />) },
+      { path: "analisis-tahun", element: wrap(<AnalisisTahunPage />) },
+      { path: "analisis-murid", element: wrap(<AnalisisMuridPage />) },
+      { path: "intervensi", element: wrap(<IntervensiPage />) },
+      { path: "rekod-rph", element: wrap(<RekodRphPage />) },
+      { path: "laporan-individu", element: wrap(<LaporanIndividuPage />) },
+      { path: "laporan-kelas", element: wrap(<LaporanKelasPage />) },
+      { path: "muat-turun", element: wrap(<MuatTurunPage />) },
+      // sedia ada
       { path: "rpt", element: wrap(<RptPage />) },
       { path: "rph", element: wrap(<RphPage />) },
       { path: "dskp", element: wrap(<DskpPage />) },

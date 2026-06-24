@@ -48,6 +48,7 @@ export default {
       },
       fontFamily: {
         sans: ["Nunito", "'Trebuchet MS'", "Segoe UI", "system-ui", "sans-serif"],
+        display: ["Poppins", "Nunito", "system-ui", "sans-serif"],
       },
       borderRadius: {
         xl: "0.875rem",

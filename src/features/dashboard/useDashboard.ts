@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/lib/supabase";
+import { one, many } from "@/lib/views";
 import type {
   DashboardStats,
   PencapaianTaburan,
@@ -10,21 +10,13 @@ import type {
   Announcement,
   CalendarEvent,
   Activity,
+  UasaGredOverall,
+  UasaGredSubjek,
+  UasaCemerlangMurid,
+  PbdTpTaburan,
+  KssrModular,
+  PanitiaPrestasi,
 } from "@/types/db";
-
-async function one<T>(view: string): Promise<T | null> {
-  const { data, error } = await supabase.from(view).select("*").single();
-  if (error) throw error;
-  return data as T;
-}
-async function many<T>(table: string, order?: string, asc = false, limit?: number): Promise<T[]> {
-  let q = supabase.from(table).select("*");
-  if (order) q = q.order(order, { ascending: asc });
-  if (limit) q = q.limit(limit);
-  const { data, error } = await q;
-  if (error) throw error;
-  return (data ?? []) as T[];
-}
 
 export function useDashboard() {
   const stats = useQuery({ queryKey: ["v_dashboard_stats"], queryFn: () => one<DashboardStats>("v_dashboard_stats") });
@@ -37,5 +29,16 @@ export function useDashboard() {
   const events = useQuery({ queryKey: ["calendar_events", "dash"], queryFn: () => many<CalendarEvent>("calendar_events", "tarikh_mula", true, 12) });
   const activities = useQuery({ queryKey: ["activities", "dash"], queryFn: () => many<Activity>("activities", "created_at", false, 5) });
 
-  return { stats, taburan, rphStatus, rphSubjek, trend, pentaksiran, announcements, events, activities };
+  // V2
+  const uasaGred = useQuery({ queryKey: ["v_uasa_gred_overall"], queryFn: () => many<UasaGredOverall>("v_uasa_gred_overall") });
+  const uasaSubjek = useQuery({ queryKey: ["v_uasa_gred_subjek"], queryFn: () => many<UasaGredSubjek>("v_uasa_gred_subjek") });
+  const tpTaburan = useQuery({ queryKey: ["v_pbd_tp_taburan"], queryFn: () => many<PbdTpTaburan>("v_pbd_tp_taburan", "tp", true) });
+  const modular = useQuery({ queryKey: ["v_kssr_modular"], queryFn: () => many<KssrModular>("v_kssr_modular") });
+  const panitia = useQuery({ queryKey: ["v_panitia_prestasi"], queryFn: () => many<PanitiaPrestasi>("v_panitia_prestasi") });
+  const topMurid = useQuery({ queryKey: ["v_uasa_cemerlang_murid", "top5"], queryFn: () => many<UasaCemerlangMurid>("v_uasa_cemerlang_murid", "purata", false, 5) });
+
+  return {
+    stats, taburan, rphStatus, rphSubjek, trend, pentaksiran, announcements, events, activities,
+    uasaGred, uasaSubjek, tpTaburan, modular, panitia, topMurid,
+  };
 }

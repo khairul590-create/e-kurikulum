@@ -10,10 +10,17 @@ import {
   ClipboardList,
   BarChart3,
   Megaphone,
+  School,
+  Award,
+  Trophy,
 } from "lucide-react";
 import { Card, CardHeader, CardBody } from "@/components/ui/Card";
 import { StatCard } from "@/components/charts/StatCard";
-import { DonutChart, TrendLine, HBar } from "@/components/charts/Charts";
+import { DonutChart, TrendLine } from "@/components/charts/Charts";
+import { ColumnChart } from "@/components/charts/ColumnChart";
+import { PercentBar, GredBar } from "@/components/charts/Bars";
+import { ModularCards } from "@/components/charts/ModularCards";
+import { Badge } from "@/components/ui/Badge";
 import { PageLoader, Progress } from "@/components/ui/Misc";
 import { useAuth } from "@/providers/AuthProvider";
 import { formatNombor, formatTarikh } from "@/lib/utils";
@@ -25,10 +32,14 @@ const TAHAP_META: Record<string, { label: string; color: string }> = {
   memuaskan: { label: "Memuaskan (60% – 74%)", color: "#F59E0B" },
   perlu_bimbingan: { label: "Perlu Bimbingan (59% ke bawah)", color: "#EF4444" },
 };
-const RPH_META: Record<string, { label: string; color: string }> = {
-  selesai: { label: "Selesai", color: "#16A34A" },
-  dalam_proses: { label: "Dalam Proses", color: "#2563EB" },
-  belum_mula: { label: "Belum Mula", color: "#EF4444" },
+
+const TP_COLOR = ["#EF4444", "#F97316", "#F59E0B", "#16A34A", "#2563EB", "#7C3AED"];
+
+const STATUS_TONE: Record<string, "green" | "blue" | "amber" | "red"> = {
+  Cemerlang: "green",
+  Baik: "blue",
+  "Perlu Fokus": "amber",
+  Sederhana: "amber",
 };
 
 export default function Dashboard() {
@@ -48,12 +59,11 @@ export default function Dashboard() {
     peratus: t.peratus,
     tahap: t.tahap,
   }));
-  const rphStatus = (d.rphStatus.data ?? []).map((r) => ({
-    name: RPH_META[r.status]?.label ?? r.status,
-    value: r.bilangan,
-    color: RPH_META[r.status]?.color ?? "#94A3B8",
-    peratus: r.peratus,
-    status: r.status,
+
+  const tpCols = (d.tpTaburan.data ?? []).map((t) => ({
+    label: `TP${t.tp}`,
+    value: t.bilangan,
+    color: TP_COLOR[t.tp - 1] ?? "#94A3B8",
   }));
 
   return (
@@ -63,24 +73,121 @@ export default function Dashboard() {
         <h2 className="text-2xl font-black tracking-tight text-ink lg:text-3xl">
           {salam}, {profile?.nama ?? "Cikgu"}! 👋
         </h2>
-        <p className="text-sm font-semibold text-ink-muted">Berikut ringkasan pelaksanaan kurikulum di sekolah.</p>
+        <p className="text-sm font-semibold text-ink-muted">Berikut ringkasan pengurusan kurikulum sekolah.</p>
       </div>
 
-      {/* Stat cards */}
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-5">
-        <StatCard icon={BookMarked} tint="blue" label="Mata Pelajaran" value={s?.jum_subjek ?? 0} hint="Jumlah mata pelajaran" />
-        <StatCard icon={Users} tint="ocean" label="Guru Aktif" value={s?.jum_guru ?? 0} hint="Jumlah guru aktif" />
-        <StatCard icon={GraduationCap} tint="light" label="Murid Aktif" value={formatNombor(s?.jum_murid)} hint="Jumlah murid" />
-        <StatCard icon={ClipboardCheck} tint="sky" label="RPH Disediakan" value={`${s?.peratus_rph ?? 0}%`} hint="Daripada keseluruhan RPH" />
-        <StatCard icon={BarChart3} tint="sun" label="Tahap Pencapaian" value={`${s?.purata_pencapaian ?? 0}%`} hint="Purata keseluruhan sekolah" />
+      {/* Stat cards — 7 metrik mockup */}
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-7">
+        <StatCard icon={GraduationCap} tint="light" label="Jumlah Murid" value={formatNombor(s?.jum_murid)} hint="Murid aktif" />
+        <StatCard icon={School} tint="ocean" label="Jumlah Kelas" value={s?.jum_kelas ?? 0} hint="Kelas keseluruhan" />
+        <StatCard icon={BarChart3} tint="sun" label="Purata UASA" value={`${s?.purata_uasa ?? 0}%`} hint="Markah purata" />
+        <StatCard icon={TrendingUp} tint="indigo" label="Purata TP (PBD)" value={s?.purata_tp ?? 0} hint="Tahap penguasaan" />
+        <StatCard icon={BookMarked} tint="blue" label="Mata Pelajaran" value={s?.jum_subjek ?? 0} hint="Jumlah subjek" />
+        <StatCard icon={ClipboardCheck} tint="sky" label="% Lulus UASA" value={`${s?.peratus_lulus_uasa ?? 0}%`} hint="Markah ≥ 20%" />
+        <StatCard icon={Users} tint="ocean" label="Guru Akademik" value={s?.jum_guru ?? 0} hint="Guru aktif" />
       </div>
 
-      {/* Row 1: Pencapaian donut | Trend | Pengumuman */}
+      {/* Row UASA + PBD */}
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
+        <Card className="lg:col-span-7">
+          <CardHeader title="Analisis UASA Mengikut Subjek" subtitle="Tahun 4–6 · Lulus ≥ 20%"
+            action={<Link to="/uasa" className="text-xs font-medium text-brand">Lihat Penuh</Link>} />
+          <CardBody className="space-y-5">
+            <div>
+              <p className="mb-2 text-sm font-semibold text-ink-muted">Agihan Gred Keseluruhan</p>
+              {(d.uasaGred.data ?? []).length > 0 ? (
+                <GredBar counts={(d.uasaGred.data ?? []).map((g) => ({ gred: g.gred, bilangan: g.bilangan }))} />
+              ) : (
+                <p className="py-3 text-sm text-ink-soft">Tiada data UASA lagi.</p>
+              )}
+            </div>
+            <div className="space-y-2.5">
+              <p className="text-sm font-semibold text-ink-muted">Purata Peratus Mengikut Mata Pelajaran</p>
+              {(d.uasaSubjek.data ?? []).map((sub) => (
+                <PercentBar key={sub.subject_id} label={sub.subjek} value={sub.purata} color={sub.warna} />
+              ))}
+              {(d.uasaSubjek.data ?? []).length === 0 && <p className="text-sm text-ink-soft">Tiada data.</p>}
+            </div>
+          </CardBody>
+        </Card>
+
+        <Card className="lg:col-span-5">
+          <CardHeader title="Analisis PBD — Tahap Penguasaan" subtitle="Tahun 1–6 · TP1–TP6"
+            action={<Link to="/pbd" className="text-xs font-medium text-brand">Lihat Penuh</Link>} />
+          <CardBody>
+            {tpCols.length > 0 ? (
+              <ColumnChart data={tpCols} valueLabel="Bilangan murid" />
+            ) : (
+              <p className="py-16 text-center text-sm text-ink-soft">Tiada data PBD.</p>
+            )}
+          </CardBody>
+        </Card>
+      </div>
+
+      {/* Row Panitia + KSSR + Top murid */}
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
         <Card className="lg:col-span-5">
-          <CardHeader title="Tahap Pencapaian Murid (Keseluruhan)" />
+          <CardHeader title="Prestasi Panitia" action={<Link to="/panitia" className="text-xs font-medium text-brand">Lihat Semua</Link>} />
+          <CardBody className="pt-1">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-line text-left text-xs font-semibold uppercase tracking-wide text-ink-soft">
+                  <th className="px-2 py-2">Panitia</th>
+                  <th className="px-2 py-2">UASA</th>
+                  <th className="px-2 py-2">TP</th>
+                  <th className="px-2 py-2">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {(d.panitia.data ?? []).slice(0, 6).map((p) => (
+                  <tr key={p.subject_id} className="border-b border-line/70 last:border-0">
+                    <td className="px-2 py-2.5 font-medium text-ink">{p.subjek}</td>
+                    <td className="px-2 py-2.5 font-bold text-ink">{p.purata_uasa}</td>
+                    <td className="px-2 py-2.5 text-ink-muted">TP{p.purata_tp}</td>
+                    <td className="px-2 py-2.5"><Badge tone={STATUS_TONE[p.status] ?? "slate"}>{p.status}</Badge></td>
+                  </tr>
+                ))}
+                {(d.panitia.data ?? []).length === 0 && (
+                  <tr><td colSpan={4} className="px-2 py-6 text-center text-ink-soft">Tiada data panitia.</td></tr>
+                )}
+              </tbody>
+            </table>
+          </CardBody>
+        </Card>
+
+        <Card className="lg:col-span-4">
+          <CardHeader title="Struktur KSSR (Modular)" />
+          <CardBody className="pt-1">
+            <ModularCards data={d.modular.data ?? []} />
+          </CardBody>
+        </Card>
+
+        <Card className="lg:col-span-3">
+          <CardHeader title="Top 5 Murid" action={<Trophy className="size-4 text-sun-deep" />} />
+          <CardBody className="space-y-2.5 pt-1">
+            {(d.topMurid.data ?? []).map((m, i) => (
+              <div key={m.student_id} className="flex items-center gap-2.5">
+                <span className={`grid size-6 shrink-0 place-items-center rounded-full text-[11px] font-bold text-white ${
+                  i === 0 ? "bg-sun-deep" : i === 1 ? "bg-slate-400" : i === 2 ? "bg-amber-700" : "bg-slate-300"
+                }`}>{i + 1}</span>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-medium text-ink">{m.nama}</p>
+                  <p className="text-[11px] text-ink-soft">{m.kelas ?? "—"}</p>
+                </div>
+                <span className="text-sm font-bold text-ink">{m.purata}</span>
+              </div>
+            ))}
+            {(d.topMurid.data ?? []).length === 0 && <p className="text-sm text-ink-soft">Tiada data.</p>}
+          </CardBody>
+        </Card>
+      </div>
+
+      {/* Row: Pencapaian donut | Trend | Pengumuman */}
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
+        <Card className="lg:col-span-5">
+          <CardHeader title="Tahap Pencapaian Murid (PBD)" />
           <CardBody className="flex flex-col items-center gap-5 sm:flex-row sm:items-center">
-            <DonutChart data={taburan} centerLabel="Purata" centerValue={`${s?.purata_pencapaian ?? 0}%`} />
+            <DonutChart data={taburan} centerLabel="Purata TP" centerValue={`${s?.purata_tp ?? 0}`} />
             <div className="flex-1 space-y-3 self-stretch">
               {taburan.map((t) => (
                 <div key={t.tahap} className="flex items-center gap-2 text-sm">
@@ -90,9 +197,6 @@ export default function Dashboard() {
                   <span className="w-12 text-right text-ink-soft">({formatNombor(t.value)})</span>
                 </div>
               ))}
-              <div className="border-t border-line pt-2 text-right text-sm text-ink-muted">
-                Jumlah Murid: <span className="font-semibold text-ink">{formatNombor(s?.jum_murid)}</span>
-              </div>
             </div>
           </CardBody>
         </Card>
@@ -123,55 +227,12 @@ export default function Dashboard() {
                 </div>
               </div>
             ))}
+            {(d.announcements.data ?? []).length === 0 && <p className="text-sm text-ink-soft">Tiada pengumuman.</p>}
           </CardBody>
         </Card>
       </div>
 
-      {/* Row 2: RPH donut | RPH per subjek | Pentaksiran */}
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
-        <Card className="lg:col-span-3">
-          <CardHeader title="Pelaksanaan RPH" />
-          <CardBody className="flex flex-col items-center gap-4">
-            <DonutChart
-              data={rphStatus}
-              centerLabel="Selesai"
-              centerValue={`${rphStatus.find((r) => r.status === "selesai")?.peratus ?? 0}%`}
-            />
-            <div className="w-full space-y-2">
-              {rphStatus.map((r) => (
-                <div key={r.status} className="flex items-center gap-2 text-sm">
-                  <span style={{ background: r.color }} className="size-2.5 rounded-full" />
-                  <span className="flex-1 text-ink-muted">{r.name}</span>
-                  <span className="font-semibold text-ink">{r.peratus}%</span>
-                  <span className="text-ink-soft">({formatNombor(r.value)})</span>
-                </div>
-              ))}
-            </div>
-          </CardBody>
-        </Card>
-
-        <Card className="lg:col-span-5">
-          <CardHeader
-            title="RPH Mengikut Mata Pelajaran"
-            action={<Link to="/rph" className="text-xs font-medium text-brand">Lihat Semua</Link>}
-          />
-          <CardBody>
-            <HBar data={(d.rphSubjek.data ?? []).slice(0, 5).map((r) => ({ subjek: r.subjek, peratus: r.peratus_selesai, warna: r.warna }))} />
-          </CardBody>
-        </Card>
-
-        <Card className="lg:col-span-4">
-          <CardHeader title="Pentaksiran & Pencapaian" />
-          <CardBody className="space-y-4 pt-1">
-            <RingkasanRow icon={ClipboardCheck} tint="bg-brand-50 text-brand" label="Pentaksiran Formatif" value={formatNombor(d.pentaksiran.data?.formatif)} sub="Dilaksanakan" />
-            <RingkasanRow icon={ClipboardList} tint="bg-purple-50 text-purple-600" label="Pentaksiran Sumatif" value={formatNombor(d.pentaksiran.data?.sumatif)} sub="Dilaksanakan" />
-            <RingkasanRow icon={FileText} tint="bg-green-50 text-green-600" label="Murid TP4 ke atas" value={`${d.pentaksiran.data?.peratus_tp4_atas ?? 0}%`} sub="Daripada keseluruhan" />
-            <RingkasanRow icon={TrendingUp} tint="bg-amber-50 text-amber-600" label="Purata Pencapaian" value={`${s?.purata_pencapaian ?? 0}%`} sub="Sekolah keseluruhan" />
-          </CardBody>
-        </Card>
-      </div>
-
-      {/* Row 3: Aktiviti + Pintasan */}
+      {/* Row: Aktiviti + Pintasan */}
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
         <Card className="lg:col-span-8">
           <CardHeader title="Aktiviti Terbaru" action={<Link to="/laporan" className="text-xs font-medium text-brand">Lihat Semua</Link>} />
@@ -222,12 +283,12 @@ export default function Dashboard() {
           <Card>
             <CardHeader title="Pintasan Pantas" />
             <CardBody className="grid grid-cols-3 gap-3">
+              <Pintasan to="/uasa" icon={BarChart3} label="UASA" tint="bg-amber-50 text-amber-600" />
+              <Pintasan to="/pbd" icon={Award} label="PBD" tint="bg-green-50 text-green-600" />
+              <Pintasan to="/intervensi" icon={ClipboardCheck} label="Intervensi" tint="bg-red-50 text-red-600" />
               <Pintasan to="/rph" icon={ClipboardList} label="RPH" tint="bg-brand-50 text-brand" />
-              <Pintasan to="/pdp" icon={GraduationCap} label="PdP" tint="bg-green-50 text-green-600" />
-              <Pintasan to="/pentaksiran" icon={ClipboardCheck} label="Pentaksiran" tint="bg-amber-50 text-amber-600" />
-              <Pintasan to="/laporan" icon={FileText} label="Laporan" tint="bg-purple-50 text-purple-600" />
-              <Pintasan to="/murid" icon={Users} label="Murid" tint="bg-pink-50 text-pink-600" />
-              <Pintasan to="/analisis" icon={BarChart3} label="Analisis" tint="bg-sky-50 text-sky-600" />
+              <Pintasan to="/analisis-murid" icon={Users} label="Murid" tint="bg-pink-50 text-pink-600" />
+              <Pintasan to="/laporan-kelas" icon={FileText} label="Laporan" tint="bg-purple-50 text-purple-600" />
             </CardBody>
           </Card>
         </div>
@@ -238,38 +299,11 @@ export default function Dashboard() {
         <CardHeader title="Dashboard KPI" action={<Link to="/kpi" className="text-xs font-medium text-brand">Lihat KPI</Link>} />
         <CardBody className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
           <KpiBar label="Penyediaan RPH" value={s?.peratus_rph ?? 0} />
-          <KpiBar label="Pencapaian Murid" value={s?.purata_pencapaian ?? 0} />
+          <KpiBar label="Lulus UASA" value={s?.peratus_lulus_uasa ?? 0} />
           <KpiBar label="Pelaksanaan Pentaksiran" value={d.pentaksiran.data?.peratus_tp4_atas ?? 0} />
-          <KpiBar label="Jumlah Kelas" value={s?.jum_kelas ?? 0} raw />
+          <KpiBar label="Purata UASA" value={s?.purata_uasa ?? 0} />
         </CardBody>
       </Card>
-    </div>
-  );
-}
-
-function RingkasanRow({
-  icon: Icon,
-  tint,
-  label,
-  value,
-  sub,
-}: {
-  icon: typeof ClipboardCheck;
-  tint: string;
-  label: string;
-  value: string;
-  sub: string;
-}) {
-  return (
-    <div className="flex items-center gap-3">
-      <div className={`grid size-10 shrink-0 place-items-center rounded-xl ${tint}`}>
-        <Icon className="size-5" />
-      </div>
-      <div className="flex-1">
-        <p className="text-sm font-medium text-ink">{label}</p>
-        <p className="text-xs text-ink-soft">{sub}</p>
-      </div>
-      <p className="text-lg font-bold text-ink">{value}</p>
     </div>
   );
 }
@@ -285,14 +319,14 @@ function Pintasan({ to, icon: Icon, label, tint }: { to: string; icon: typeof Us
   );
 }
 
-function KpiBar({ label, value, raw }: { label: string; value: number; raw?: boolean }) {
+function KpiBar({ label, value }: { label: string; value: number }) {
   return (
     <div>
       <div className="mb-1.5 flex items-center justify-between text-sm">
         <span className="text-ink-muted">{label}</span>
-        <span className="font-semibold text-ink">{raw ? value : `${value}%`}</span>
+        <span className="font-semibold text-ink">{value}%</span>
       </div>
-      {!raw && <Progress value={value} />}
+      <Progress value={value} />
     </div>
   );
 }

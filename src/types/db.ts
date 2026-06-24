@@ -5,6 +5,9 @@ export type AssessmentType = "formatif" | "sumatif";
 export type Tahap = "cemerlang" | "baik" | "memuaskan" | "perlu_bimbingan";
 export type Jantina = "L" | "P";
 export type RoomStatus = "aktif" | "penyelenggaraan" | "tidak_aktif";
+export type ModulKssr = "teras_asas" | "teras_tema" | "elektif";
+export type UasaGred = "A" | "B" | "C" | "D" | "E" | "F";
+export type IntervensiStatus = "aktif" | "selesai" | "dirancang";
 
 export interface Profile {
   id: string;
@@ -12,6 +15,7 @@ export interface Profile {
   email: string | null;
   role: Role;
   is_ketua_panitia: boolean;
+  panitia_subject_id: string | null;
   jawatan: string | null;
   no_telefon: string | null;
   avatar_url: string | null;
@@ -33,6 +37,11 @@ export interface SchoolSettings {
   logo_url: string | null;
   alamat: string | null;
   tahun_semasa: string | null;
+  guru_besar_id: string | null;
+  pk1_id: string | null;
+  pk_hem_id: string | null;
+  pk_koko_id: string | null;
+  pk_petang_id: string | null;
 }
 
 export interface Subject {
@@ -40,6 +49,8 @@ export interface Subject {
   kod: string;
   nama: string;
   warna: string;
+  modul: ModulKssr | null;
+  is_uasa: boolean;
   created_at: string;
 }
 
@@ -205,6 +216,9 @@ export interface DashboardStats {
   peratus_rph: number;
   purata_pencapaian: number;
   jum_kelas: number;
+  purata_uasa: number;
+  peratus_lulus_uasa: number;
+  purata_tp: number;
 }
 export interface PencapaianTaburan {
   tahap: Tahap;
@@ -232,4 +246,166 @@ export interface PentaksiranRingkasan {
   formatif: number;
   sumatif: number;
   peratus_tp4_atas: number;
+}
+
+// ---------- V2: UASA / Intervensi / Pencerapan ----------
+export interface UasaRecord {
+  id: string;
+  subject_id: string;
+  kelas_id: string | null;
+  tahun: number;
+  year_id: string | null;
+  guru_id: string | null;
+  created_at: string;
+}
+export interface UasaScore {
+  id: string;
+  uasa_id: string;
+  student_id: string;
+  markah: number;
+  gred: UasaGred;
+  lulus: boolean;
+  created_at: string;
+}
+export interface IntervensiProgram {
+  id: string;
+  nama: string;
+  jenis: string | null;
+  sasaran: string | null;
+  guru_id: string | null;
+  subject_id: string | null;
+  kemajuan: number;
+  status: IntervensiStatus;
+  created_at: string;
+}
+export interface IntervensiStudent {
+  id: string;
+  program_id: string;
+  student_id: string;
+}
+export interface Pencerapan {
+  id: string;
+  guru_id: string;
+  pencerap_id: string | null;
+  rph_id: string | null;
+  tarikh: string;
+  rating: number | null;
+  catatan: string | null;
+  created_at: string;
+}
+export interface PanitiaFail {
+  subject_id: string;
+  drive_url: string | null;
+  carta_url: string | null;
+  catatan: string | null;
+  updated_at: string;
+}
+
+// ---------- V2 view shapes ----------
+export interface UasaGredSubjek {
+  subject_id: string;
+  subjek: string;
+  warna: string;
+  jumlah: number;
+  gred_a: number;
+  gred_b: number;
+  gred_c: number;
+  gred_d: number;
+  gred_e: number;
+  gred_f: number;
+  purata: number;
+}
+export interface UasaGredOverall {
+  gred: UasaGred;
+  bilangan: number;
+  peratus: number;
+}
+export interface UasaPassSubjek {
+  subject_id: string;
+  subjek: string;
+  jumlah: number;
+  peratus_lulus: number;
+}
+export interface UasaCemerlangMurid {
+  student_id: string;
+  nama: string;
+  kelas: string | null;
+  tahun: number | null;
+  bil_subjek: number;
+  purata: number;
+  gred_terendah: UasaGred | null;
+}
+export interface PbdTpTaburan {
+  tp: number;
+  bilangan: number;
+  peratus: number;
+}
+export interface PbdTpSubjek {
+  subject_id: string;
+  subjek: string;
+  warna: string;
+  tp1: number;
+  tp2: number;
+  tp3: number;
+  tp4: number;
+  tp5: number;
+  tp6: number;
+  tp_purata: number;
+}
+export interface PanitiaPrestasi {
+  subject_id: string;
+  subjek: string;
+  warna: string;
+  modul: ModulKssr | null;
+  ketua: string | null;
+  bil_guru: number;
+  purata_uasa: number;
+  purata_tp: number;
+  status: string;
+}
+export interface KelasPrestasi {
+  kelas_id: string;
+  kelas: string;
+  tahun: number;
+  bil_murid: number;
+  purata_uasa: number;
+  purata_tp: number;
+  peratus_lulus: number;
+  status: string;
+}
+export interface TahunPrestasi {
+  tahun: number;
+  bil_kelas: number;
+  bil_murid: number;
+  purata_uasa: number;
+}
+export interface TahunTrendGps {
+  sesi: string;
+  semasa: boolean;
+  purata: number;
+}
+export interface KssrModular {
+  modul: string;
+  bilangan: number;
+  senarai: string | null;
+}
+export interface RphGuruStatus {
+  guru_id: string;
+  guru: string;
+  subjek: string | null;
+  jum_rph: number;
+  rph_selesai: number;
+  peratus_selesai: number;
+  rating_pencerapan: number | null;
+}
+export interface IntervensiRingkasan {
+  id: string;
+  nama: string;
+  jenis: string | null;
+  sasaran: string | null;
+  kemajuan: number;
+  status: IntervensiStatus;
+  guru: string | null;
+  subjek: string | null;
+  bil_murid: number;
 }
