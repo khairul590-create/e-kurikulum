@@ -15,6 +15,9 @@ import {
   UserCog,
   LifeBuoy,
   ClipboardList,
+  Users,
+  BookOpen,
+  DoorOpen,
   type LucideIcon,
 } from "lucide-react";
 
@@ -46,6 +49,15 @@ export const navGroups: NavGroup[] = [
       { label: "Analisis Murid", to: "/analisis-murid", icon: GraduationCap },
       { label: "Program Intervensi", to: "/intervensi", icon: HeartPulse },
       { label: "Rekod RPH & PdP", to: "/rekod-rph", icon: ClipboardCheck },
+    ],
+  },
+  {
+    title: "Data Asas",
+    items: [
+      { label: "Murid", to: "/murid", icon: Users, adminOnly: true },
+      { label: "Kelas", to: "/kelas", icon: School, adminOnly: true },
+      { label: "Subjek", to: "/subjek", icon: BookOpen, adminOnly: true },
+      { label: "Bilik", to: "/bilik", icon: DoorOpen, adminOnly: true },
     ],
   },
   {
