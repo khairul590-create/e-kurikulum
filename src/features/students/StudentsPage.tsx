@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/Badge";
 import { useOptions } from "@/lib/crud";
 import { useAuth } from "@/providers/AuthProvider";
 import { formatTarikh } from "@/lib/utils";
+import { ImportMuridDialog } from "./ImportMuridDialog";
 
 type Row = {
   id: string;
@@ -67,5 +68,12 @@ export default function StudentsPage() {
     ],
   };
 
-  return <CrudPage config={config} canWrite={isAdmin} extraFieldOptions={{ kelas_id: kelas.data ?? [] }} />;
+  return (
+    <CrudPage
+      config={config}
+      canWrite={isAdmin}
+      extraFieldOptions={{ kelas_id: kelas.data ?? [] }}
+      headerAction={isAdmin ? <ImportMuridDialog kelasOptions={kelas.data ?? []} /> : undefined}
+    />
+  );
 }

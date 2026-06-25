@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { useForm } from "react-hook-form";
 import { Plus } from "lucide-react";
 import type { CrudConfig, FieldDef } from "./types";
@@ -17,11 +17,14 @@ export function CrudPage<T extends { id: string }>({
   config,
   canWrite = true,
   extraFieldOptions = {},
+  headerAction,
 }: {
   config: CrudConfig<T>;
   canWrite?: boolean;
   /** options dinamik untuk field select (kunci = field.name) */
   extraFieldOptions?: Record<string, { value: string; label: string }[]>;
+  /** butang tambahan di sebelah "Tambah" (cth: Import) */
+  headerAction?: ReactNode;
 }) {
   const toast = useToast();
   const { profile } = useAuth();
@@ -109,9 +112,12 @@ export function CrudPage<T extends { id: string }>({
         title={config.title}
         subtitle={config.subtitle}
         action={canWrite && (
-          <Button onClick={openAdd}>
-            <Plus className="size-4" /> Tambah {config.singular}
-          </Button>
+          <div className="flex items-center gap-2">
+            {headerAction}
+            <Button onClick={openAdd}>
+              <Plus className="size-4" /> Tambah {config.singular}
+            </Button>
+          </div>
         )}
       />
 
