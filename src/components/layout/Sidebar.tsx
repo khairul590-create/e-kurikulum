@@ -1,5 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import { LogOut } from "lucide-react";
 import { navGroups } from "@/config/nav";
 import { useAuth } from "@/providers/AuthProvider";
 import { supabase } from "@/lib/supabase";
@@ -7,7 +8,7 @@ import { cn } from "@/lib/utils";
 import type { SchoolSettings } from "@/types/db";
 
 export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
-  const { isAdmin } = useAuth();
+  const { isAdmin, signOut } = useAuth();
   const sekolah = useQuery({
     queryKey: ["school_settings"],
     queryFn: async () => {
@@ -72,6 +73,16 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
           <div className="text-sm font-extrabold tracking-wide">🌟 SMART KURIKULUM</div>
           <div className="text-[9px] opacity-90">Excellence Together</div>
         </div>
+
+        {/* Log keluar */}
+        <button
+          type="button"
+          onClick={() => signOut()}
+          className="mt-3 flex w-full items-center justify-center gap-2 rounded-[10px] border border-white/20 bg-white/10 px-3 py-2.5 text-[14px] font-semibold text-white transition hover:bg-white/20"
+        >
+          <LogOut className="size-[17px]" />
+          Log Keluar
+        </button>
       </div>
     </aside>
   );

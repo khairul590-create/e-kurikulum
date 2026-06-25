@@ -62,8 +62,8 @@ export default {
         danger: "#EF4444",
       },
       fontFamily: {
-        sans: ["Nunito", "'Trebuchet MS'", "Segoe UI", "system-ui", "sans-serif"],
-        display: ["Poppins", "Nunito", "system-ui", "sans-serif"],
+        sans: ["'Plus Jakarta Sans'", "system-ui", "sans-serif"],
+        display: ["'Plus Jakarta Sans'", "system-ui", "sans-serif"],
       },
       borderRadius: {
         xl: "0.875rem",
