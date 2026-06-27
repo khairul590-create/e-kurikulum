@@ -140,5 +140,7 @@
     width: auto !important;
     margin: 0 !important;
     box-shadow: none !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
 }

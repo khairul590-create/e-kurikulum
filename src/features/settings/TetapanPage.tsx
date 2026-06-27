@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import * as Tabs from "@radix-ui/react-tabs";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { ImagePlus, Loader2, X } from "lucide-react";
 import { Card, CardBody } from "@/components/ui/Card";
 import { PageTitle } from "@/components/panel/Panel";
 import { Button } from "@/components/ui/Button";
@@ -137,7 +138,7 @@ function SekolahTab() {
       return data;
     },
   });
-  const [form, setForm] = useState({ nama_sekolah: "", kod_sekolah: "", subtajuk: "", alamat: "" });
+  const [form, setForm] = useState({ nama_sekolah: "", kod_sekolah: "", subtajuk: "", alamat: "", logo_url: "" });
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -147,6 +148,7 @@ function SekolahTab() {
         kod_sekolah: data.kod_sekolah ?? "",
         subtajuk: data.subtajuk ?? "",
         alamat: data.alamat ?? "",
+        logo_url: data.logo_url ?? "",
       });
   }, [data]);
 
@@ -167,6 +169,9 @@ function SekolahTab() {
   return (
     <Card>
       <CardBody className="max-w-lg space-y-4">
+        <Field label="Logo Sekolah">
+          <LogoUpload value={form.logo_url} onChange={(url) => setForm({ ...form, logo_url: url })} />
+        </Field>
         <Field label="Nama Sekolah">
           <Input value={form.nama_sekolah} onChange={(e) => setForm({ ...form, nama_sekolah: e.target.value })} />
         </Field>
@@ -184,6 +189,63 @@ function SekolahTab() {
         </Button>
       </CardBody>
     </Card>
+  );
+}
+
+function LogoUpload({ value, onChange }: { value: string; onChange: (url: string) => void }) {
+  const toast = useToast();
+  const [busy, setBusy] = useState(false);
+
+  async function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      toast("error", "Sila pilih fail imej.");
+      return;
+    }
+    setBusy(true);
+    try {
+      const ext = file.name.split(".").pop() ?? "png";
+      const path = `sekolah/${crypto.randomUUID()}.${ext}`;
+      const { error } = await supabase.storage.from("opr").upload(path, file, { upsert: false });
+      if (error) throw error;
+      const { data } = supabase.storage.from("opr").getPublicUrl(path);
+      onChange(data.publicUrl);
+      toast("success", "Logo dimuat naik. Tekan Simpan untuk kekalkan.");
+    } catch (err) {
+      toast("error", (err as Error).message ?? "Gagal muat naik logo");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <div className="flex items-center gap-3">
+      <div className="grid size-20 place-items-center overflow-hidden rounded-2xl border-2 border-line bg-cream">
+        {value ? (
+          <img src={value} alt="logo sekolah" className="size-full object-contain" />
+        ) : (
+          <span className="text-[11px] text-ink-muted">Tiada logo</span>
+        )}
+      </div>
+      <div className="flex flex-col gap-2">
+        <label className="inline-flex cursor-pointer items-center gap-2 rounded-2xl border-2 border-line bg-white px-4 py-2 text-sm font-extrabold text-ink transition hover:bg-cream">
+          {busy ? <Loader2 className="size-4 animate-spin" /> : <ImagePlus className="size-4" />}
+          {value ? "Ganti Logo" : "Muat Naik Logo"}
+          <input type="file" accept="image/*" className="hidden" onChange={handleFile} disabled={busy} />
+        </label>
+        {value && (
+          <button
+            type="button"
+            onClick={() => onChange("")}
+            className="inline-flex items-center gap-1 text-xs font-semibold text-danger hover:underline"
+          >
+            <X className="size-3.5" /> Buang logo
+          </button>
+        )}
+      </div>
+    </div>
   );
 }
 
