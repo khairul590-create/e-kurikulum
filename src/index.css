@@ -123,3 +123,22 @@
     transition-delay: 0.3s;
   }
 }
+
+/* ── Cetakan OPR (A4 satu muka surat) ── */
+@page {
+  size: A4;
+  margin: 0;
+}
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #fff !important;
+  }
+  .print-sheet {
+    width: auto !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+  }
+}

@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import { AppShell } from "@/components/layout/AppShell";
-import { RoleGate } from "./guards";
+import { RoleGate, ProtectedRoute } from "./guards";
 import { PageLoader } from "@/components/ui/Misc";
 
 const Login = lazy(() => import("@/pages/Login"));
@@ -40,12 +40,18 @@ const RoomsPage = lazy(() => import("@/features/rooms/RoomsPage"));
 const TetapanPage = lazy(() => import("@/features/settings/TetapanPage"));
 const AuditLogPage = lazy(() => import("@/features/audit/AuditLogPage"));
 const BantuanPage = lazy(() => import("@/features/help/BantuanPage"));
+const OprListPage = lazy(() => import("@/features/opr/OprListPage"));
+const OprPrintPage = lazy(() => import("@/features/opr/OprPrintPage"));
 
 const wrap = (el: React.ReactNode) => <Suspense fallback={<PageLoader />}>{el}</Suspense>;
 const admin = (el: React.ReactNode) => <RoleGate>{wrap(el)}</RoleGate>;
 
 export const router = createBrowserRouter([
   { path: "/login", element: wrap(<Login />) },
+  {
+    path: "/opr/:id/cetak",
+    element: <ProtectedRoute>{wrap(<OprPrintPage />)}</ProtectedRoute>,
+  },
   {
     path: "/",
     element: <AppShell />,
@@ -75,6 +81,7 @@ export const router = createBrowserRouter([
       { path: "sbd-plc", element: wrap(<SbdPlcPage />) },
       { path: "analisis", element: wrap(<AnalisisPage />) },
       { path: "laporan", element: admin(<LaporanPage />) },
+      { path: "opr", element: admin(<OprListPage />) },
       { path: "kpi", element: wrap(<KpiPage />) },
       { path: "murid", element: wrap(<StudentsPage />) },
       { path: "guru", element: admin(<TeachersPage />) },

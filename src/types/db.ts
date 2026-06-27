@@ -208,6 +208,31 @@ export interface KpiTarget {
   unit: string;
 }
 
+export interface OprReport {
+  id: string;
+  tajuk: string;
+  anjuran: string | null;
+  tarikh_mula: string | null;
+  tarikh_tamat: string | null;
+  masa: string | null;
+  tempat: string | null;
+  sasaran: string | null;
+  bil_peserta: number | null;
+  objektif: string | null;
+  pelaksanaan: string | null;
+  kekuatan: string | null;
+  penambahbaikan: string | null;
+  refleksi: string | null;
+  kos: number | null;
+  disediakan_oleh: string | null;
+  disahkan_oleh: string | null;
+  gambar: string[];
+  status: string;
+  guru_id: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
 // View shapes
 export interface DashboardStats {
   jum_subjek: number;

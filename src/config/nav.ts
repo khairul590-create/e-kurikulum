@@ -18,6 +18,7 @@ import {
   Users,
   BookOpen,
   DoorOpen,
+  ScrollText,
   type LucideIcon,
 } from "lucide-react";
 
@@ -63,6 +64,7 @@ export const navGroups: NavGroup[] = [
   {
     title: "Laporan",
     items: [
+      { label: "Laporan OPR", to: "/opr", icon: ScrollText },
       { label: "Laporan Individu", to: "/laporan-individu", icon: FileText },
       { label: "Laporan Kelas", to: "/laporan-kelas", icon: FileBarChart },
       { label: "Muat Turun", to: "/muat-turun", icon: Download },
