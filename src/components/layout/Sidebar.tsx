@@ -6,6 +6,7 @@ import { useAuth } from "@/providers/AuthProvider";
 import { supabase } from "@/lib/supabase";
 import { cn } from "@/lib/utils";
 import type { SchoolSettings } from "@/types/db";
+import logoSekolah from "@/assets/logo-sekolah.jpg";
 
 export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
   const { isAdmin, signOut } = useAuth();
@@ -23,7 +24,9 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
     <aside className="flex h-full w-[240px] flex-col overflow-y-auto bg-gradient-to-b from-[#1a237e] via-[#283593] to-[#3949ab] pb-4">
       {/* Logo */}
       <div className="flex items-center gap-2.5 border-b border-white/15 px-4 py-4">
-        <div className="grid size-[44px] shrink-0 place-items-center rounded-full bg-white text-2xl">🎓</div>
+        <div className="grid size-[44px] shrink-0 place-items-center overflow-hidden rounded-full bg-white p-0.5">
+          <img src={sekolah.data?.logo_url || logoSekolah} alt="logo" className="size-full object-contain" />
+        </div>
         <div className="leading-tight text-white">
           <div className="text-[13px] font-bold uppercase">{nama}</div>
           <div className="text-[10px] opacity-75">{sub}</div>

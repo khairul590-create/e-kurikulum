@@ -5,6 +5,7 @@ import { supabase } from "@/lib/supabase";
 import { PageLoader } from "@/components/ui/Misc";
 import { formatTarikh } from "@/lib/utils";
 import type { OprReport, SchoolSettings } from "@/types/db";
+import logoSekolah from "@/assets/logo-sekolah.jpg";
 
 function Baris({ label, value }: { label: string; value?: string | number | null }) {
   return (
@@ -52,6 +53,7 @@ export default function OprPrintPage() {
   const r = opr.data;
   const s = sekolah.data;
   const namaSekolah = s?.nama_sekolah ?? "Sekolah";
+  const logo = s?.logo_url || logoSekolah; // fallback logo tertanam (tak bergantung link luar)
 
   const tarikh =
     formatTarikh(r.tarikh_mula) + (r.tarikh_tamat ? ` – ${formatTarikh(r.tarikh_tamat)}` : "");
@@ -76,24 +78,34 @@ export default function OprPrintPage() {
 
       {/* Helaian A4 */}
       <div className="print-sheet mx-auto w-[210mm] bg-white p-[14mm] text-[12px] leading-relaxed text-slate-900 shadow-lg">
-        {/* Kepala — logo kiri + teks kiri */}
-        <div className="flex items-center gap-4 border-b-[3px] border-slate-800 pb-3">
-          {s?.logo_url && (
-            <img
-              src={s.logo_url}
-              alt="logo sekolah"
-              className="h-[20mm] w-[20mm] shrink-0 object-contain"
-            />
-          )}
-          <div className="min-w-0 leading-tight">
-            <h1 className="text-lg font-black uppercase tracking-wide">{namaSekolah}</h1>
-            {s?.alamat && <p className="text-[11px] text-slate-700">{s.alamat}</p>}
-            {s?.kod_sekolah && <p className="text-[11px] text-slate-700">Kod Sekolah: {s.kod_sekolah}</p>}
+        {/* Kepala — logo kiri + teks kiri (gaya premium) */}
+        <div className="flex items-center gap-5">
+          <img
+            src={logo}
+            alt="logo sekolah"
+            className="h-[24mm] w-[24mm] shrink-0 object-contain"
+          />
+          <div className="min-w-0 flex-1 leading-tight">
+            <h1 className="text-[20px] font-black uppercase tracking-tight text-[#1a237e]">
+              {namaSekolah}
+            </h1>
+            {s?.alamat && <p className="mt-0.5 text-[11px] text-slate-600">{s.alamat}</p>}
+            <p className="text-[11px] text-slate-600">
+              {s?.kod_sekolah ? `Kod Sekolah: ${s.kod_sekolah}` : ""}
+            </p>
+            <div className="mt-1.5 h-[3px] w-24 rounded-full bg-gradient-to-r from-[#f9a825] to-[#ff6d00]" />
           </div>
         </div>
-        <h2 className="mt-2 text-center text-base font-bold uppercase tracking-wide">
-          Laporan Program (One Page Report)
-        </h2>
+
+        {/* Garis berkembar bawah kepala */}
+        <div className="mt-2 border-b-[3px] border-double border-[#1a237e]" />
+
+        {/* Tajuk laporan — band premium */}
+        <div className="mt-3 text-center">
+          <span className="inline-block rounded-full bg-[#1a237e] px-5 py-1 text-[13px] font-bold uppercase tracking-[2px] text-white">
+            Laporan Program · One Page Report
+          </span>
+        </div>
 
         {/* Butiran */}
         <table className="mt-3 w-full border-collapse">
