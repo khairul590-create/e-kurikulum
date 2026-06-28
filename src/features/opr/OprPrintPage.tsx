@@ -52,7 +52,10 @@ export default function OprPrintPage() {
 
   const r = opr.data;
   const s = sekolah.data;
-  const namaSekolah = s?.nama_sekolah ?? "Sekolah";
+  // Maklumat sekolah tertanam (default) — DB override jika ada
+  const namaSekolah = s?.nama_sekolah || "Sekolah Kebangsaan Darau";
+  const alamat = s?.alamat || "Peti Surat 11881, 88820 Kota Kinabalu, Sabah, Malaysia";
+  const telefon = "088-491326";
   const logo = s?.logo_url || logoSekolah; // fallback logo tertanam (tak bergantung link luar)
 
   const tarikh =
@@ -83,26 +86,27 @@ export default function OprPrintPage() {
           <img
             src={logo}
             alt="logo sekolah"
-            className="h-[24mm] w-[24mm] shrink-0 object-contain"
+            className="h-[26mm] w-[26mm] shrink-0 object-contain"
           />
-          <div className="min-w-0 flex-1 leading-tight">
-            <h1 className="text-[20px] font-black uppercase tracking-tight text-[#1a237e]">
+          <div className="min-w-0 flex-1 leading-snug">
+            <h1 className="text-[22px] font-black uppercase tracking-tight text-[#1a237e]">
               {namaSekolah}
             </h1>
-            {s?.alamat && <p className="mt-0.5 text-[11px] text-slate-600">{s.alamat}</p>}
+            <p className="mt-1 text-[11px] text-slate-600">{alamat}</p>
             <p className="text-[11px] text-slate-600">
-              {s?.kod_sekolah ? `Kod Sekolah: ${s.kod_sekolah}` : ""}
+              Tel: {telefon}
+              {s?.kod_sekolah ? `  ·  Kod Sekolah: ${s.kod_sekolah}` : ""}
             </p>
-            <div className="mt-1.5 h-[3px] w-24 rounded-full bg-gradient-to-r from-[#f9a825] to-[#ff6d00]" />
+            <div className="mt-2 h-[3px] w-28 rounded-full bg-gradient-to-r from-[#f9a825] to-[#ff6d00]" />
           </div>
         </div>
 
         {/* Garis berkembar bawah kepala */}
-        <div className="mt-2 border-b-[3px] border-double border-[#1a237e]" />
+        <div className="mt-2.5 border-b-[3px] border-double border-[#1a237e]" />
 
         {/* Tajuk laporan — band premium */}
         <div className="mt-3 text-center">
-          <span className="inline-block rounded-full bg-[#1a237e] px-5 py-1 text-[13px] font-bold uppercase tracking-[2px] text-white">
+          <span className="inline-block rounded-full bg-[#1a237e] px-6 py-1.5 text-[13px] font-bold uppercase tracking-[2.5px] text-white">
             Laporan Program · One Page Report
           </span>
         </div>
