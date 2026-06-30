@@ -233,6 +233,27 @@ export interface OprReport {
   updated_at: string;
 }
 
+export interface JadualWaktu {
+  id: string;
+  guru_id: string;
+  hari: number; // 1=Isnin .. 5=Jumaat
+  masa_mula: string; // "08:00:00"
+  masa_akhir: string;
+  kelas_id: string | null;
+  subject_id: string | null;
+  bilik: string | null;
+  sesi: string; // pagi / petang
+  year_id: string | null;
+  created_at: string;
+}
+
+// Bentuk dengan join (untuk paparan grid / senarai)
+export interface JadualRow extends JadualWaktu {
+  guru: { nama: string } | null;
+  kelas: { nama: string } | null;
+  subjek: { nama: string; warna: string } | null;
+}
+
 // View shapes
 export interface DashboardStats {
   jum_subjek: number;

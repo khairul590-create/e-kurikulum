@@ -42,6 +42,8 @@ const AuditLogPage = lazy(() => import("@/features/audit/AuditLogPage"));
 const BantuanPage = lazy(() => import("@/features/help/BantuanPage"));
 const OprListPage = lazy(() => import("@/features/opr/OprListPage"));
 const OprPrintPage = lazy(() => import("@/features/opr/OprPrintPage"));
+const GuruJadualPage = lazy(() => import("@/features/jadual/GuruJadualPage"));
+const JadualUrusPage = lazy(() => import("@/features/jadual/JadualUrusPage"));
 
 const wrap = (el: React.ReactNode) => <Suspense fallback={<PageLoader />}>{el}</Suspense>;
 const admin = (el: React.ReactNode) => <RoleGate>{wrap(el)}</RoleGate>;
@@ -68,6 +70,8 @@ export const router = createBrowserRouter([
       { path: "analisis-murid", element: wrap(<AnalisisMuridPage />) },
       { path: "intervensi", element: wrap(<IntervensiPage />) },
       { path: "rekod-rph", element: wrap(<RekodRphPage />) },
+      { path: "jadual", element: wrap(<GuruJadualPage />) },
+      { path: "jadual/urus", element: admin(<JadualUrusPage />) },
       { path: "laporan-individu", element: admin(<LaporanIndividuPage />) },
       { path: "laporan-kelas", element: admin(<LaporanKelasPage />) },
       { path: "muat-turun", element: admin(<MuatTurunPage />) },

@@ -19,6 +19,7 @@ import {
   BookOpen,
   DoorOpen,
   ScrollText,
+  Clock,
   type LucideIcon,
 } from "lucide-react";
 
@@ -50,6 +51,7 @@ export const navGroups: NavGroup[] = [
       { label: "Analisis Murid", to: "/analisis-murid", icon: GraduationCap },
       { label: "Program Intervensi", to: "/intervensi", icon: HeartPulse },
       { label: "Rekod RPH & PdP", to: "/rekod-rph", icon: ClipboardCheck },
+      { label: "Jadual Waktu Guru", to: "/jadual", icon: Clock },
     ],
   },
   {

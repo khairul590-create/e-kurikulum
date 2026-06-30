@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-export type FieldType = "text" | "number" | "textarea" | "date" | "select" | "checkbox";
+export type FieldType = "text" | "number" | "textarea" | "date" | "time" | "select" | "checkbox";
 
 export interface FieldDef {
   name: string;
