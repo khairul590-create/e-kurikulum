@@ -20,6 +20,7 @@ import {
   DoorOpen,
   ScrollText,
   Clock,
+  CalendarClock,
   type LucideIcon,
 } from "lucide-react";
 
@@ -75,6 +76,7 @@ export const navGroups: NavGroup[] = [
   {
     title: "Sistem",
     items: [
+      { label: "Sesi Akademik", to: "/sesi", icon: CalendarClock, adminOnly: true },
       { label: "Tetapan", to: "/tetapan", icon: Settings, adminOnly: true },
       { label: "Pengguna", to: "/guru", icon: UserCog, adminOnly: true },
       { label: "Log Audit", to: "/audit-log", icon: ClipboardList, adminOnly: true },

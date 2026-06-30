@@ -44,6 +44,7 @@ const OprListPage = lazy(() => import("@/features/opr/OprListPage"));
 const OprPrintPage = lazy(() => import("@/features/opr/OprPrintPage"));
 const GuruJadualPage = lazy(() => import("@/features/jadual/GuruJadualPage"));
 const JadualUrusPage = lazy(() => import("@/features/jadual/JadualUrusPage"));
+const SesiPage = lazy(() => import("@/features/settings/SesiPage"));
 
 const wrap = (el: React.ReactNode) => <Suspense fallback={<PageLoader />}>{el}</Suspense>;
 const admin = (el: React.ReactNode) => <RoleGate>{wrap(el)}</RoleGate>;
@@ -92,6 +93,7 @@ export const router = createBrowserRouter([
       { path: "subjek", element: admin(<SubjectsPage />) },
       { path: "kelas", element: admin(<ClassesPage />) },
       { path: "bilik", element: admin(<RoomsPage />) },
+      { path: "sesi", element: admin(<SesiPage />) },
       { path: "tetapan", element: admin(<TetapanPage />) },
       { path: "audit-log", element: admin(<AuditLogPage />) },
       { path: "bantuan", element: wrap(<BantuanPage />) },
