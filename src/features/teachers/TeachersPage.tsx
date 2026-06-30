@@ -10,10 +10,10 @@ export default function TeachersPage() {
   const subjectOpts = useOptions("subjects", "nama", { orderBy: "nama" });
 
   const config: CrudConfig<Profile> = {
-    title: "Pengguna",
-    subtitle: "Senarai guru, kakitangan akademik & ketua panitia",
+    title: "Guru & Pengguna",
+    subtitle: "Tambah nama guru (untuk dropdown semua tab) · akaun login tetap melalui Supabase Auth",
     table: "profiles",
-    singular: "Pengguna",
+    singular: "Guru",
     orderBy: "nama",
     ascending: true,
     searchKeys: ["nama", "email", "jawatan"],
@@ -37,10 +37,11 @@ export default function TeachersPage() {
         render: (r) => <Badge tone={r.status === "aktif" ? "green" : "slate"}>{r.status}</Badge>,
       },
     ],
-    // Nota: cipta akaun guru sebenar perlu melalui Supabase Auth.
-    // Borang ini mengemas kini profil sedia ada sahaja.
+    // Tambah guru = cipta rekod nama sahaja (tiada akaun login).
+    // Untuk beri akaun login sebenar, guna Supabase Auth → profil auto-link.
     fields: [
       { name: "nama", label: "Nama", required: true, full: true },
+      { name: "email", label: "Emel (pilihan)" },
       { name: "jawatan", label: "Jawatan" },
       { name: "no_telefon", label: "No. Telefon" },
       {
@@ -64,6 +65,17 @@ export default function TeachersPage() {
       { name: "panitia_subject_id", label: "Panitia (Mata Pelajaran)", type: "select" },
       { name: "is_ketua_panitia", label: "Ketua Panitia?", type: "checkbox" },
     ],
+    // Pastikan nilai NOT NULL ada default supaya INSERT/UPDATE tak gagal
+    fromForm: (v) => ({
+      nama: (v.nama as string)?.trim(),
+      email: (v.email as string)?.trim() || null,
+      jawatan: (v.jawatan as string)?.trim() || null,
+      no_telefon: (v.no_telefon as string)?.trim() || null,
+      role: (v.role as string) || "guru",
+      status: (v.status as string) || "aktif",
+      panitia_subject_id: v.panitia_subject_id || null,
+      is_ketua_panitia: !!v.is_ketua_panitia,
+    }),
   };
 
   return <CrudPage config={config} canWrite={isAdmin} extraFieldOptions={{ panitia_subject_id: subjectOpts.data ?? [] }} />;
