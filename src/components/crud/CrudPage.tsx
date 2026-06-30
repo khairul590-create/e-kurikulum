@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import { useForm } from "react-hook-form";
 import { Plus } from "lucide-react";
 import type { CrudConfig, FieldDef } from "./types";
@@ -18,6 +18,9 @@ export function CrudPage<T extends { id: string }>({
   canWrite = true,
   extraFieldOptions = {},
   headerAction,
+  toolbar,
+  clientFilter,
+  clientSort,
 }: {
   config: CrudConfig<T>;
   canWrite?: boolean;
@@ -25,6 +28,12 @@ export function CrudPage<T extends { id: string }>({
   extraFieldOptions?: Record<string, { value: string; label: string }[]>;
   /** butang tambahan di sebelah "Tambah" (cth: Import) */
   headerAction?: ReactNode;
+  /** kawalan tapis tambahan di atas jadual (cth: dropdown kelas) */
+  toolbar?: ReactNode;
+  /** tapis baris di sisi klien (selepas fetch) */
+  clientFilter?: (row: T) => boolean;
+  /** susun baris di sisi klien (selepas fetch) */
+  clientSort?: (a: T, b: T) => number;
 }) {
   const toast = useToast();
   const { profile } = useAuth();
@@ -36,6 +45,13 @@ export function CrudPage<T extends { id: string }>({
   const create = useCreate(config.table);
   const update = useUpdate(config.table);
   const remove = useRemove(config.table);
+
+  const rows = useMemo(() => {
+    let d = list.data ?? [];
+    if (clientFilter) d = d.filter(clientFilter);
+    if (clientSort) d = [...d].sort(clientSort);
+    return d;
+  }, [list.data, clientFilter, clientSort]);
 
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<T | null>(null);
@@ -122,6 +138,7 @@ export function CrudPage<T extends { id: string }>({
       />
 
       <Card className="p-5">
+        {toolbar && <div className="mb-4">{toolbar}</div>}
         {list.isLoading ? (
           <PageLoader />
         ) : list.isError ? (
@@ -131,7 +148,7 @@ export function CrudPage<T extends { id: string }>({
         ) : (
           <DataTable
             columns={config.columns}
-            data={list.data ?? []}
+            data={rows}
             searchKeys={config.searchKeys as string[]}
             canWrite={canWrite}
             onEdit={openEdit}
