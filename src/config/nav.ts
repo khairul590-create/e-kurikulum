@@ -78,7 +78,7 @@ export const navGroups: NavGroup[] = [
     items: [
       { label: "Sesi Akademik", to: "/sesi", icon: CalendarClock, adminOnly: true },
       { label: "Tetapan", to: "/tetapan", icon: Settings, adminOnly: true },
-      { label: "Pengguna", to: "/guru", icon: UserCog, adminOnly: true },
+      { label: "Guru & Pengguna", to: "/guru", icon: UserCog, adminOnly: true },
       { label: "Log Audit", to: "/audit-log", icon: ClipboardList, adminOnly: true },
       { label: "Bantuan", to: "/bantuan", icon: LifeBuoy },
     ],
