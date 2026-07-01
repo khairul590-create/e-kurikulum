@@ -32,6 +32,11 @@ export default function TeachersPage() {
         render: (r) => (r.is_ketua_panitia ? <Badge tone="green">Ya</Badge> : "—"),
       },
       {
+        key: "is_setiausaha_panitia",
+        header: "Setiausaha Panitia",
+        render: (r) => (r.is_setiausaha_panitia ? <Badge tone="blue">Ya</Badge> : "—"),
+      },
+      {
         key: "status",
         header: "Status",
         render: (r) => <Badge tone={r.status === "aktif" ? "green" : "slate"}>{r.status}</Badge>,
@@ -64,6 +69,7 @@ export default function TeachersPage() {
       },
       { name: "panitia_subject_id", label: "Panitia (Mata Pelajaran)", type: "select" },
       { name: "is_ketua_panitia", label: "Ketua Panitia?", type: "checkbox" },
+      { name: "is_setiausaha_panitia", label: "Setiausaha Panitia?", type: "checkbox" },
     ],
     // Pastikan nilai NOT NULL ada default supaya INSERT/UPDATE tak gagal
     fromForm: (v) => ({
@@ -75,6 +81,7 @@ export default function TeachersPage() {
       status: (v.status as string) || "aktif",
       panitia_subject_id: v.panitia_subject_id || null,
       is_ketua_panitia: !!v.is_ketua_panitia,
+      is_setiausaha_panitia: !!v.is_setiausaha_panitia,
     }),
   };
 
