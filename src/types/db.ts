@@ -15,7 +15,6 @@ export interface Profile {
   email: string | null;
   role: Role;
   is_ketua_panitia: boolean;
-  is_setiausaha_panitia: boolean;
   panitia_subject_id: string | null;
   jawatan: string | null;
   no_telefon: string | null;
@@ -38,6 +37,7 @@ export interface SchoolSettings {
   logo_url: string | null;
   alamat: string | null;
   tahun_semasa: string | null;
+  drive_url: string | null;
   guru_besar_id: string | null;
   pk1_id: string | null;
   pk_hem_id: string | null;
@@ -340,27 +340,6 @@ export interface Pencerapan {
   catatan: string | null;
   created_at: string;
 }
-export interface PanitiaFail {
-  subject_id: string;
-  drive_url: string | null;
-  carta_url: string | null;
-  catatan: string | null;
-  updated_at: string;
-}
-
-export type PanitiaDokumenJenis = "minit_mesyuarat" | "rpt_rph" | "am";
-
-export interface PanitiaDokumen {
-  id: string;
-  subject_id: string;
-  jenis: PanitiaDokumenJenis;
-  nama: string;
-  drive_url: string;
-  catatan: string | null;
-  uploaded_by: string | null;
-  created_at: string;
-}
-
 // ---------- V2 view shapes ----------
 export interface UasaGredSubjek {
   subject_id: string;
@@ -418,7 +397,6 @@ export interface PanitiaPrestasi {
   warna: string;
   modul: ModulKssr | null;
   ketua: string | null;
-  setiausaha: string | null;
   bil_guru: number;
   purata_uasa: number;
   purata_tp: number;

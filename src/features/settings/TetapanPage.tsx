@@ -138,7 +138,7 @@ function SekolahTab() {
       return data;
     },
   });
-  const [form, setForm] = useState({ nama_sekolah: "", kod_sekolah: "", subtajuk: "", alamat: "", logo_url: "" });
+  const [form, setForm] = useState({ nama_sekolah: "", kod_sekolah: "", subtajuk: "", alamat: "", logo_url: "", drive_url: "" });
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -149,6 +149,7 @@ function SekolahTab() {
         subtajuk: data.subtajuk ?? "",
         alamat: data.alamat ?? "",
         logo_url: data.logo_url ?? "",
+        drive_url: data.drive_url ?? "",
       });
   }, [data]);
 
@@ -183,6 +184,9 @@ function SekolahTab() {
         </Field>
         <Field label="Alamat">
           <Textarea value={form.alamat} onChange={(e) => setForm({ ...form, alamat: e.target.value })} />
+        </Field>
+        <Field label="Pautan Google Drive Sekolah (kongsi semua panitia)">
+          <Input placeholder="https://drive.google.com/drive/folders/..." value={form.drive_url} onChange={(e) => setForm({ ...form, drive_url: e.target.value })} />
         </Field>
         <Button loading={saving} onClick={save}>
           Simpan
