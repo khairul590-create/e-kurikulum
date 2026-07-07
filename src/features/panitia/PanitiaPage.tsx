@@ -56,7 +56,7 @@ export default function PanitiaPage() {
         <PanelHead variant="purple" icon="📊">Prestasi & Pengurusan Panitia</PanelHead>
         <PanelBody className="px-3 py-2">
           <table className="data-table">
-            <thead><tr><th>Panitia</th><th>Ketua Panitia</th><th>Guru</th><th>Purata UASA</th><th>TP Purata</th><th>Status</th><th>Fail</th></tr></thead>
+            <thead><tr><th>Panitia</th><th>Ketua Panitia</th><th>Setiausaha</th><th>Guru</th><th>Purata UASA</th><th>TP Purata</th><th>Status</th><th>Fail</th></tr></thead>
             <tbody>
               {rows.map((r) => (
                 <tr key={r.subject_id}>
@@ -66,6 +66,7 @@ export default function PanitiaPage() {
                     </Link>
                   </td>
                   <td>{r.ketua ?? "—"}</td>
+                  <td>{r.setiausaha ?? "—"}</td>
                   <td>{r.bil_guru}</td>
                   <td><b>{r.purata_uasa}</b></td>
                   <td>TP{r.purata_tp}</td>
@@ -73,7 +74,7 @@ export default function PanitiaPage() {
                   <td><Link to={`/panitia/${r.subject_id}`} className="inline-flex items-center gap-1 text-brand hover:underline"><FolderOpen className="size-3.5" /> Buka</Link></td>
                 </tr>
               ))}
-              {rows.length === 0 && <tr><td colSpan={7} className="py-8 text-center text-ink-soft">Tiada data panitia.</td></tr>}
+              {rows.length === 0 && <tr><td colSpan={8} className="py-8 text-center text-ink-soft">Tiada data panitia.</td></tr>}
             </tbody>
           </table>
         </PanelBody>
