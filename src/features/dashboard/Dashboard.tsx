@@ -48,18 +48,19 @@ export default function Dashboard() {
     <div className="space-y-3.5">
       {/* Stat cards */}
       <StatRow>
-        <MkStatCard sc={1} icon="👨‍🎓" value={formatNombor(s?.jum_murid)} label="Jumlah Murid" />
-        <MkStatCard sc={2} icon="🏫" value={s?.jum_kelas ?? 0} label="Jumlah Kelas" />
-        <MkStatCard sc={3} icon="📈" value={`${du?.purata_uasa ?? s?.purata_uasa ?? 0}%`} label="Purata UASA" />
-        <MkStatCard sc={4} icon="📊" value={s?.purata_tp ?? 0} label="Purata TP (PBD)" />
-        <MkStatCard sc={5} icon="📚" value={s?.jum_subjek ?? 0} label="Mata Pelajaran" />
-        <MkStatCard sc={6} icon="✅" value={`${du?.peratus_lulus_uasa ?? s?.peratus_lulus_uasa ?? 0}%`} label="% Lulus UASA" />
-        <MkStatCard sc={7} icon="👨‍🏫" value={s?.jum_guru ?? 0} label="Guru Akademik" />
+        <MkStatCard sc={1} icon="👨‍🎓" value={formatNombor(s?.jum_murid)} label="Jumlah Murid" to="/murid" />
+        <MkStatCard sc={2} icon="🏫" value={s?.jum_kelas ?? 0} label="Jumlah Kelas" to="/kelas" />
+        <MkStatCard sc={3} icon="📈" value={`${du?.purata_uasa ?? s?.purata_uasa ?? 0}%`} label="Purata UASA" to="/uasa/entry" />
+        <MkStatCard sc={4} icon="📊" value={s?.purata_tp ?? 0} label="Purata TP (PBD)" to="/pbd" />
+        <MkStatCard sc={5} icon="📚" value={s?.jum_subjek ?? 0} label="Mata Pelajaran" to="/subjek" />
+        <MkStatCard sc={6} icon="✅" value={`${du?.peratus_lulus_uasa ?? s?.peratus_lulus_uasa ?? 0}%`} label="% Lulus UASA" to="/uasa/entry" />
+        <MkStatCard sc={7} icon="👨‍🏫" value={s?.jum_guru ?? 0} label="Guru Akademik" to="/guru" />
       </StatRow>
 
       {/* Mid row */}
       <div className="flex flex-wrap gap-3.5">
-        <Panel className="min-w-[340px] flex-[1.35]">
+        <Link to="/uasa/entry" className="block min-w-[340px] flex-[1.35] transition hover:-translate-y-0.5 hover:shadow-lg">
+        <Panel>
           <PanelHead variant="blue" icon="📊" tag="Tahun 4–6">Analisis UASA Mengikut Subjek</PanelHead>
           <PanelBody className="space-y-3">
             <p className="text-[13px] font-semibold text-[#555]">📋 Agihan Gred Keseluruhan (Markah /100 · Lulus 20%)</p>
@@ -77,8 +78,10 @@ export default function Dashboard() {
             </div>
           </PanelBody>
         </Panel>
+        </Link>
 
         <div className="flex min-w-[280px] flex-1 flex-col gap-3.5">
+          <Link to="/pbd" className="block transition hover:-translate-y-0.5 hover:shadow-lg">
           <Panel>
             <PanelHead variant="green" icon="📊" tag="Tahun 1–6">Analisis PBD — Tahap Penguasaan</PanelHead>
             <PanelBody>
@@ -92,16 +95,20 @@ export default function Dashboard() {
               {total === 0 && null}
             </PanelBody>
           </Panel>
+          </Link>
+          <Link to="/subjek" className="block transition hover:-translate-y-0.5 hover:shadow-lg">
           <Panel>
             <PanelHead variant="indigo" icon="🧩">Struktur KSSR (Modular)</PanelHead>
             <PanelBody><ModuleGrid data={d.modular.data ?? []} /></PanelBody>
           </Panel>
+          </Link>
         </div>
       </div>
 
       {/* Bottom row */}
       <div className="flex flex-wrap gap-3.5">
-        <Panel className="min-w-[300px] flex-[1.2]">
+        <Link to="/panitia" className="block min-w-[300px] flex-[1.2] transition hover:-translate-y-0.5 hover:shadow-lg">
+        <Panel>
           <PanelHead variant="purple" icon="🏆">Prestasi Panitia Mata Pelajaran</PanelHead>
           <PanelBody className="px-3 py-2">
             <table className="data-table">
@@ -121,8 +128,10 @@ export default function Dashboard() {
             </table>
           </PanelBody>
         </Panel>
+        </Link>
 
-        <Panel className="min-w-[260px] flex-1">
+        <Link to="/murid" className="block min-w-[260px] flex-1 transition hover:-translate-y-0.5 hover:shadow-lg">
+        <Panel>
           <PanelHead variant="orange" icon="🥇">Top 5 Murid Terbaik</PanelHead>
           <PanelBody className="px-3 py-2">
             <table className="data-table">
@@ -141,6 +150,7 @@ export default function Dashboard() {
             </table>
           </PanelBody>
         </Panel>
+        </Link>
 
         <Panel className="min-w-[240px] flex-[0.85]">
           <PanelHead variant="teal" icon="🔔">Aktiviti Terkini</PanelHead>
