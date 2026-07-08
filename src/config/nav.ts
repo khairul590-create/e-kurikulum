@@ -48,7 +48,7 @@ export const navGroups: NavGroup[] = [
       { label: "Analisis UASA", to: "/uasa", icon: BarChart3 },
       { label: "Analisis PBD (TP)", to: "/pbd", icon: Award },
       { label: "Panitia & Subjek", to: "/panitia", icon: Layers },
-      { label: "Dokumen Setiausaha", to: "/dokumen-setiausaha", icon: FolderOpen },
+      { label: "Fail Drive Setiausaha", to: "/dokumen-setiausaha", icon: FolderOpen },
       { label: "Analisis Kelas", to: "/analisis-kelas", icon: School },
       { label: "Analisis Tahun", to: "/analisis-tahun", icon: TrendingUp },
       { label: "Analisis Murid", to: "/analisis-murid", icon: GraduationCap },

@@ -59,7 +59,7 @@ export default function DokumenSetiausahaPage() {
   if (!subjectId) {
     return (
       <div>
-        <PageTitle icon="📄" title="Dokumen Setiausaha" />
+        <PageTitle icon="📄" title="Fail Drive Setiausaha" />
         <Panel>
           <PanelBody>
             <p className="py-6 text-center text-[13px] text-ink-soft">
@@ -82,7 +82,7 @@ export default function DokumenSetiausahaPage() {
     <div>
       <PageTitle
         icon={<span className="size-3.5 rounded-full" style={{ background: s.warna }} />}
-        title="Dokumen Setiausaha"
+        title="Fail Drive Setiausaha"
         subtitle={`Panitia ${s.nama} · Kod ${s.kod}`}
       />
 
