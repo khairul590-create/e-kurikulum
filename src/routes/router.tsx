@@ -13,7 +13,8 @@ const UasaEntryPage = lazy(() => import("@/features/uasa/UasaEntryPage"));
 const PbdPage = lazy(() => import("@/features/pbd/PbdPage"));
 const PanitiaPage = lazy(() => import("@/features/panitia/PanitiaPage"));
 const PanitiaDetailPage = lazy(() => import("@/features/panitia/PanitiaDetailPage"));
-const DokumenSetiausahaPage = lazy(() => import("@/features/panitia/DokumenSetiausahaPage"));
+const FailDriveKpPage = lazy(() => import("@/features/panitia/FailDriveKpPage"));
+const FailDriveSetiausahaPage = lazy(() => import("@/features/panitia/FailDriveSetiausahaPage"));
 const AnalisisKelasPage = lazy(() => import("@/features/analisis-kelas/AnalisisKelasPage"));
 const AnalisisTahunPage = lazy(() => import("@/features/analisis-tahun/AnalisisTahunPage"));
 const AnalisisMuridPage = lazy(() => import("@/features/analisis-murid/AnalisisMuridPage"));
@@ -67,7 +68,8 @@ export const router = createBrowserRouter([
       { path: "pbd", element: wrap(<PbdPage />) },
       { path: "panitia", element: wrap(<PanitiaPage />) },
       { path: "panitia/:subjectId", element: wrap(<PanitiaDetailPage />) },
-      { path: "dokumen-setiausaha", element: wrap(<DokumenSetiausahaPage />) },
+      { path: "fail-drive-kp", element: wrap(<FailDriveKpPage />) },
+      { path: "fail-drive-setiausaha", element: wrap(<FailDriveSetiausahaPage />) },
       { path: "analisis-kelas", element: wrap(<AnalisisKelasPage />) },
       { path: "analisis-tahun", element: wrap(<AnalisisTahunPage />) },
       { path: "analisis-murid", element: wrap(<AnalisisMuridPage />) },

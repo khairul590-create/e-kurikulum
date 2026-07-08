@@ -10,7 +10,7 @@ import { useAuth } from "@/providers/AuthProvider";
 import { driveFolderEmbed } from "@/lib/drive";
 import type { Subject, PanitiaFail } from "@/types/db";
 
-export default function DokumenSetiausahaPage() {
+export default function FailDriveKpPage() {
   const { isAdmin, profile } = useAuth();
   const toast = useToast();
   const qc = useQueryClient();
@@ -62,7 +62,7 @@ export default function DokumenSetiausahaPage() {
 
   return (
     <div>
-      <PageTitle icon="📄" title="Fail Drive Setiausaha" subtitle="Pilih panitia untuk papar/urus pautan Google Drive" />
+      <PageTitle icon="📁" title="Fail Drive Ketua Panitia" subtitle="Pilih panitia untuk papar/urus pautan Google Drive" />
 
       <Panel>
         <PanelBody>
